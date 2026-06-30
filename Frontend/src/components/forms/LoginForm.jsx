@@ -36,7 +36,7 @@ const LoginForm = () => {
         if (res.success) {
             addNotification('Login successful! Welcome back.', 'success');
             if (res.role === 'admin' || res.role === 'mentor') {
-                navigate('/admin-panel');
+                navigate('/admin/dashboard');
             } else {
                 navigate('/dashboard');
             }

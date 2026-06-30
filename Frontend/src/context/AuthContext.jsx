@@ -85,6 +85,8 @@ export const AuthProvider = ({ children }) => {
     // Handle Logout
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('enrolled_courses');
+        localStorage.removeItem('is_subscribed');
         setToken(null);
         setUser(null);
     };

@@ -1,60 +1,44 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNotificationsStore } from '../store/notificationsStore';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import Button from '../components/ui/Button';
+import Input from '../components/ui/Input';
 import { Helmet } from 'react-helmet-async';
 import {
-    User,
-    Mail,
-    Calendar,
-    Upload,
+    GraduationCap,
+    Layers,
+    Clock,
     Award,
-    BookOpen,
-    Shield,
-    TrendingUp,
     Zap,
     PlayCircle,
     FileText,
     MessageSquare,
     CreditCard,
-    Settings,
-    HelpCircle,
     ChevronRight,
     CheckCircle2,
-    Clock,
-    XCircle,
-    GraduationCap,
-    Briefcase,
-    Folder,
-    Video,
-    Bell,
-    Flame,
-    ArrowRight,
-    Star,
-    Eye,
-    ExternalLink,
-    Layers,
-    Cpu,
-    Globe,
-    PenTool
+    Lock as LockIcon,
+    Unlock as UnlockIcon,
+    Sparkles,
+    Check,
+    Bell
 } from 'lucide-react';
 
-// ─── Horizontal Spark Bar ───────────────────────────────────────
+// ─── Horizontal Spark Bar ───
 const SparkBar = ({ value, max, color = '#6366f1', height = 6 }) => (
     <div className="w-full rounded-full overflow-hidden" style={{ height, backgroundColor: 'rgba(30,41,59,0.6)' }}>
         <div
             className="h-full rounded-full transition-all duration-1000"
-            style={{ width: `${Math.min((value / max) * 100, 100)}%`, background: `linear-gradient(90deg, ${color}, ${color}88)` }}
+            style={{ width: `${max > 0 ? Math.min((value / max) * 100, 100) : 0}%`, background: `linear-gradient(90deg, ${color}, ${color}88)` }}
         />
     </div>
 );
 
-// ─── Animated Counter ───────────────────────────────────────────
+// ─── Animated Counter ───
 const CountBadge = ({ value, label, gradient }) => (
-    <div className={`relative rounded-2xl p-[1px] overflow-hidden`} style={{ background: gradient }}>
+    <div className="relative rounded-2xl p-[1px] overflow-hidden" style={{ background: gradient }}>
         <div className="bg-slate-950 rounded-2xl px-5 py-4 text-center h-full">
             <p className="text-2xl font-black text-white tracking-tight">{value}</p>
             <p className="text-[10px] text-slate-500 font-semibold uppercase tracking-widest mt-1">{label}</p>
@@ -62,319 +46,400 @@ const CountBadge = ({ value, label, gradient }) => (
     </div>
 );
 
-// ═══════════════════════════════════════════════════════════════
-// DEEP IT LABS — ORIGINAL BENTO DASHBOARD
-// ═══════════════════════════════════════════════════════════════
+// ─── 8 Premium Courses Data ───
+const MOCK_COURSES = [
+    {
+        id: 'html5-seo',
+        title: 'HTML5 Semantic & SEO Foundations',
+        category: 'Frontend',
+        difficulty: 'Beginner',
+        duration: '6 weeks',
+        chapters: [
+            { title: 'Semantic Tags vs Layout Divs', content: 'Semantic tags like <header>, <nav>, <main>, <section>, <article>, and <footer> explain the content structure to search engines and accessibility screen readers. Reusing standard div elements reduces accessibility index scoring.' },
+            { title: 'Meta Tags & OpenGraph APIs', content: 'Configure dynamic meta viewport elements, content summaries, and OpenGraph tags to customize link-preview cards on chat clients (e.g. WhatsApp, Slack, Twitter).' }
+        ]
+    },
+    {
+        id: 'css-grid',
+        title: 'Modern CSS Flexbox & Grid Layouts',
+        category: 'Frontend',
+        difficulty: 'Beginner',
+        duration: '8 weeks',
+        chapters: [
+            { title: 'Flexbox Alignment Axes', content: 'Flexbox aligns elements in a single dimension (row or column). flex-grow handles width expansions, justify-content targets the primary axis, and align-items handles the secondary cross-axis.' },
+            { title: 'CSS Grid Track Layout Templates', content: 'Grid provides two-dimensional grids (rows and columns). grid-template-areas simplifies building layout grids by matching named sections visually.' }
+        ]
+    },
+    {
+        id: 'js-async',
+        title: 'JS Async & Advanced ES6 Features',
+        category: 'Language',
+        difficulty: 'Intermediate',
+        duration: '10 weeks',
+        chapters: [
+            { title: 'Event Loops & Microtasks', content: 'JavaScript engines run on a single thread. The Event Loop coordinates execution cycles, giving Promise resolutions (Microtasks) priority over timers like setTimeout.' },
+            { title: 'Callbacks, Promises, and Async/Await', content: 'Async/Await wraps Promises in standard linear syntax, making complex promise chains clean, readable, and easy to debug.' }
+        ]
+    },
+    {
+        id: 'react-hooks',
+        title: 'React Hooks & State Architecture',
+        category: 'Frontend',
+        difficulty: 'Intermediate',
+        duration: '12 weeks',
+        chapters: [
+            { title: 'useState, useEffect, and useRef', content: 'useState triggers component renders. useEffect runs side-effects matching changes in dependency arrays. useRef stores mutable values without triggering state updates.' },
+            { title: 'Zustand Global State Stores', content: 'Zustand is a lightweight alternative to Redux. It defines simple state hooks, avoiding unnecessary component renders.' }
+        ]
+    },
+    {
+        id: 'node-express',
+        title: 'Express.js REST API Design',
+        category: 'Backend',
+        difficulty: 'Intermediate',
+        duration: '14 weeks',
+        chapters: [
+            { title: 'Express Routing & Middleware Stack', content: 'Express manages requests through sequential middleware layers. You can intercept incoming payloads to parse bodies, handle validation, or enforce auth guards.' },
+            { title: 'Centralized Express Error Handlers', content: 'Define centralized catch blocks (e.g. next(err)) to standardize API responses with clear status codes and error messages.' }
+        ]
+    },
+    {
+        id: 'mongodb-mongoose',
+        title: 'MongoDB Schema & Aggregations',
+        category: 'Backend',
+        difficulty: 'Advanced',
+        duration: '12 weeks',
+        chapters: [
+            { title: 'Mongoose Schemas & Schema Validation', content: 'Mongoose enforces validation rules and relationships in MongoDB. You can run pre-save hooks to hash credentials or encrypt fields.' },
+            { title: 'Aggregation Pipeline Operators', content: '$match filters records, $group groups matching datasets, and $sort sorts outputs to run fast, complex analytics inside MongoDB.' }
+        ]
+    },
+    {
+        id: 'docker-containers',
+        title: 'Docker Orchestration & Microservices',
+        category: 'DevOps',
+        difficulty: 'Advanced',
+        duration: '8 weeks',
+        chapters: [
+            { title: 'Containerization with Dockerfile', content: 'Docker packages your code and environment. You can use multi-stage builds to optimize image sizes.' },
+            { title: 'Docker Compose Local Clusters', content: 'Docker Compose spins up database and server container nodes locally in isolated network channels.' }
+        ]
+    },
+    {
+        id: 'aws-ci-cd',
+        title: 'AWS Cloud Deployment & Pipelines',
+        category: 'DevOps',
+        difficulty: 'Advanced',
+        duration: '16 weeks',
+        chapters: [
+            { title: 'EC2 Instances & Load Balancing', content: 'Deploy servers on AWS EC2. Configure Application Load Balancers to route and distribute user traffic safely.' },
+            { title: 'GitHub Actions CI/CD Deployment', content: 'Configure CD pipelines to automatically build, test, and deploy code updates to AWS clusters on repository pushes.' }
+        ]
+    }
+];
+
 const Dashboard = () => {
-    const { user, setUser } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const { addNotification } = useNotificationsStore();
     const navigate = useNavigate();
-    const [file, setFile] = useState(null);
-    const [uploading, setUploading] = useState(false);
+    const queryClient = useQueryClient();
+
     const [activeView, setActiveView] = useState('overview');
 
-    // ─── API Data ───────────────────────────────────────────────
-    const { data: courses = [] } = useQuery({
-        queryKey: ['myCourses'],
-        queryFn: async () => {
-            try {
-                const res = await api.get('/courses?limit=10');
-                return res.data?.data || [];
-            } catch { return []; }
-        },
-        retry: 1
+    // ─── local storage persistence for subscription & course enrollments ───
+    const [enrolledCourses, setEnrolledCourses] = useState(() => {
+        const saved = localStorage.getItem('enrolled_courses');
+        return saved ? JSON.parse(saved) : [];
     });
 
-    // ─── Avatar Upload ──────────────────────────────────────────
-    const handleFileChange = (e) => setFile(e.target.files[0]);
-    const handleUpload = async (e) => {
+    const [isSubscribed, setIsSubscribed] = useState(() => {
+        return localStorage.getItem('is_subscribed') === 'true';
+    });
+
+    // ─── Reader Slideover states ───
+    const [activeReadingCourse, setActiveReadingCourse] = useState(null);
+    const [activeChapterIndex, setActiveChapterIndex] = useState(0);
+
+    // ─── Subscription Checkout states ───
+    const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+    const [checkoutTab, setCheckoutTab] = useState('card'); // 'card' | 'upi'
+    const [cardNumber, setCardNumber] = useState('4242 •••• •••• 4821');
+    const [cardExpiry, setCardExpiry] = useState('12/29');
+    const [cardCvv, setCardCvv] = useState('382');
+    const [cardHolder, setCardHolder] = useState(user?.name || 'Sandeep Admin');
+    const [upiId, setUpiId] = useState('sandeep@upi');
+
+    // ─── API Data: User Payments ───
+    const { data: myPayments = [], refetch: refetchPayments } = useQuery({
+        queryKey: ['myPaymentsDashboard'],
+        queryFn: async () => {
+            try {
+                const res = await api.get('/payments/my-payments');
+                return res.data?.data || [];
+            } catch { return []; }
+        }
+    });
+
+    // ─── Simulated payment mutation for subscription check ───
+    const checkoutMutation = useMutation({
+        mutationFn: async (paymentData) => {
+            const res = await api.post('/payments', paymentData);
+            return res.data.data;
+        },
+        onSuccess: () => {
+            setIsSubscribed(true);
+            localStorage.setItem('is_subscribed', 'true');
+            queryClient.invalidateQueries({ queryKey: ['myPaymentsDashboard'] });
+            queryClient.invalidateQueries({ queryKey: ['adminPayments'] });
+            refetchPayments();
+            setShowCheckoutModal(false);
+            addNotification('Premium subscription activated successfully! All courses unlocked.', 'success');
+        },
+        onError: (err) => {
+            addNotification(err.response?.data?.error || 'Simulated checkout failed', 'error');
+        }
+    });
+
+    const handleLocalSubscribe = (e) => {
         e.preventDefault();
-        if (!file) { addNotification('Please select an image file first', 'warning'); return; }
-        setUploading(true);
-        const formData = new FormData();
-        formData.append('avatar', file);
-        try {
-            const res = await api.put('/users/avatar', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-            setUser(prev => ({ ...prev, avatar: res.data.avatarUrl }));
-            addNotification('Profile picture updated!', 'success');
-            setFile(null);
-        } catch (err) {
-            addNotification(err.response?.data?.error || 'Upload failed', 'error');
-        } finally { setUploading(false); }
+        checkoutMutation.mutate({
+            amount: 199.00,
+            description: 'Premium Platform Access Pass (Card/UPI Checkout)',
+            cardBrand: checkoutTab === 'card' ? 'Visa' : 'UPI',
+            last4: checkoutTab === 'card' ? cardNumber.slice(-4) : 'UPI'
+        });
     };
 
-    const avatarSrc = user?.avatar && user.avatar !== 'default-avatar.png' ? user.avatar : null;
+    // ─── Enroll & Open Course Logic ───
+    const handleOpenCourse = (course) => {
+        if (enrolledCourses.includes(course.id)) {
+            setActiveReadingCourse(course);
+            setActiveChapterIndex(0);
+            return;
+        }
 
-    // ─── Streak / engagement data ───────────────────────────────
-    const streak = 12; // Days
-    const xpPoints = 2450;
+        if (enrolledCourses.length >= 2 && !isSubscribed) {
+            setShowCheckoutModal(true);
+            addNotification('Free course limit reached! Please subscribe to unlock unlimited courses.', 'warning');
+            return;
+        }
 
-    // ─── Module progress data ───────────────────────────────────
+        const updatedList = [...enrolledCourses, course.id];
+        setEnrolledCourses(updatedList);
+        localStorage.setItem('enrolled_courses', JSON.stringify(updatedList));
+        setActiveReadingCourse(course);
+        setActiveChapterIndex(0);
+        addNotification(`Successfully started: ${course.title}`, 'success');
+    };
+
+    const hasData = enrolledCourses.length > 0 || isSubscribed;
+    const streak = hasData ? 5 : 0;
+    const xpPoints = enrolledCourses.length * 400 + (isSubscribed ? 1500 : 0);
+
+    const totalHours = enrolledCourses.length * 12;
+    const totalRequired = MOCK_COURSES.length * 15;
+    const totalPaid = myPayments.reduce((sum, p) => sum + (p.amount || 0), 0);
+
     const modules = [
-        { name: 'Frontend Foundations', icon: Globe, hours: 42, total: 42, color: '#10b981', status: 'done' },
-        { name: 'JavaScript Mastery', icon: Zap, hours: 38, total: 38, color: '#f59e0b', status: 'done' },
-        { name: 'React Ecosystem', icon: Layers, hours: 28, total: 36, color: '#6366f1', status: 'active' },
-        { name: 'Backend Engineering', icon: Cpu, hours: 8, total: 40, color: '#8b5cf6', status: 'active' },
-        { name: 'DevOps & Deployment', icon: Globe, hours: 0, total: 30, color: '#334155', status: 'locked' },
+        { name: 'Frontend Foundations', hours: enrolledCourses.length > 0 ? 42 : 0, total: 42, color: '#10b981' },
+        { name: 'JavaScript Mastery', hours: enrolledCourses.length > 1 ? 38 : 0, total: 38, color: '#f97316' },
+        { name: 'React Ecosystem', hours: enrolledCourses.length > 3 ? 28 : 0, total: 36, color: '#6366f1' },
+        { name: 'Backend Engineering', hours: enrolledCourses.length > 5 ? 8 : 0, total: 40, color: '#8b5cf6' }
     ];
 
-    const totalHours = modules.reduce((s, m) => s + m.hours, 0);
-    const totalRequired = modules.reduce((s, m) => s + m.total, 0);
-
-    // ─── Recent activity timeline ───────────────────────────────
-    const timeline = [
-        { action: 'Completed React Hooks Deep Dive', time: '2 hours ago', type: 'complete' },
-        { action: 'Submitted Assignment #14 — State Management', time: '5 hours ago', type: 'submit' },
-        { action: 'Watched "Node.js Event Loop" lecture', time: 'Yesterday', type: 'watch' },
-        { action: 'Earned JavaScript Mastery Certificate', time: '3 days ago', type: 'badge' },
-        { action: 'Payment received — ₹15,000', time: '1 week ago', type: 'payment' },
+    const timeline = hasData ? [
+        ...(enrolledCourses.map(id => ({ action: `Started module: ${id}`, time: 'Just now', type: 'badge' }))),
+        ...(myPayments.map(p => ({ action: `Simulated Payment Completed — $${p.amount}`, time: new Date(p.createdAt).toLocaleDateString(), type: 'payment' }))),
+        { action: 'Completed React Hooks Deep Dive', time: '2 hours ago', type: 'complete' }
+    ] : [
+        { action: 'Welcome to Deep IT Labs! Your dashboard is now initialized.', time: 'Just now', type: 'badge' }
     ];
 
     const timelineIcons = {
         complete: { icon: CheckCircle2, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-        submit: { icon: FileText, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-        watch: { icon: PlayCircle, color: 'text-violet-400', bg: 'bg-violet-500/10' },
         badge: { icon: Award, color: 'text-amber-400', bg: 'bg-amber-500/10' },
         payment: { icon: CreditCard, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
     };
 
-    // ─── View tabs ──────────────────────────────────────────────
-    const views = [
-        { id: 'overview', label: 'Overview' },
-        { id: 'learning', label: 'Learning Path' },
-        { id: 'payments', label: 'Payments' },
-    ];
-
     return (
-        <div className="min-h-screen bg-slate-950 text-white font-sans">
+        <div className="min-h-screen bg-[#030408] text-white font-sans relative py-12">
             <Helmet>
-                <title>My Dashboard | Deep IT Labs</title>
-                <meta name="description" content="Your personal learning hub at Deep IT Labs. Track progress, view courses, and manage your engineering journey." />
+                <title>Dashboard Overview | Deep IT Labs</title>
             </Helmet>
 
-            <div className="max-w-7xl mx-auto px-5 md:px-10 py-8 space-y-7">
+            {/* Glowing background meshes */}
+            <div className="absolute top-0 right-1/4 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.04)_0%,transparent_70%)] blur-3xl pointer-events-none" />
+            <div className="absolute bottom-10 left-10 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.03)_0%,transparent_70%)] blur-3xl pointer-events-none" />
 
-                {/* ─── Greeting Row ──────────────────────────────── */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-5">
-                    <div className="flex items-center gap-4">
-                        {/* Avatar */}
-                        <div className="relative group">
-                            <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-cyan-500 via-indigo-500 to-fuchsia-500 opacity-50 blur-sm group-hover:opacity-80 transition-all duration-500" />
-                            {avatarSrc ? (
-                                <img src={avatarSrc} alt="" className="relative w-16 h-16 rounded-2xl object-cover border-2 border-slate-900" />
-                            ) : (
-                                <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-600 to-indigo-600 flex items-center justify-center text-xl font-black text-white border-2 border-slate-900">
-                                    {user?.name?.charAt(0).toUpperCase()}
-                                </div>
-                            )}
-                        </div>
-                        <div>
-                            <p className="text-slate-500 text-xs font-medium">Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'},</p>
-                            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">{user?.name}</h1>
-                            <div className="flex items-center gap-3 mt-1">
-                                <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-gradient-to-r from-cyan-500/10 to-indigo-500/10 text-cyan-400 px-2.5 py-0.5 rounded-md border border-cyan-500/20 uppercase tracking-wider">
-                                    {user?.role}
-                                </span>
-                                <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-orange-500/10 text-orange-400 px-2.5 py-0.5 rounded-md border border-orange-500/20">
-                                    <Flame className="w-3 h-3" /> {streak} day streak
-                                </span>
-                            </div>
-                        </div>
+            <div className="max-w-7xl mx-auto px-5 md:px-10 space-y-8 relative z-10">
+
+                {/* Minimalist Header (No user name greeting banner) */}
+                <div className="flex justify-between items-center border-b border-white/5 pb-6">
+                    <div>
+                        <span className="text-[9px] font-mono uppercase tracking-widest text-indigo-400">Student Dashboard</span>
+                        <h1 className="text-2xl font-black tracking-tight text-white mt-1">Dashboard Console</h1>
+                        <p className="text-slate-500 text-xs mt-0.5">Access courses, view metrics, and manage billing coordinates.</p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <button onClick={() => navigate('/settings')} className="p-2.5 text-slate-400 hover:text-white bg-slate-900/60 hover:bg-slate-800 border border-slate-800/60 rounded-xl transition-all cursor-pointer">
-                            <Settings className="w-4 h-4" />
-                        </button>
-                        <button className="relative p-2.5 text-slate-400 hover:text-white bg-slate-900/60 hover:bg-slate-800 border border-slate-800/60 rounded-xl transition-all cursor-pointer">
+                        <button className="p-2.5 text-slate-400 hover:text-white bg-slate-900/60 hover:bg-slate-800 border border-slate-800/60 rounded-xl transition-all cursor-pointer">
                             <Bell className="w-4 h-4" />
-                            <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-cyan-500 rounded-full" />
                         </button>
                     </div>
                 </div>
 
-                {/* ─── View Tabs ─────────────────────────────────── */}
+                {/* Tab selectors */}
                 <div className="flex gap-1 bg-slate-900/30 border border-slate-800/50 rounded-xl p-1 w-fit">
-                    {views.map(v => (
+                    {['overview', 'learning', 'payments'].map(tabId => (
                         <button
-                            key={v.id}
-                            onClick={() => setActiveView(v.id)}
-                            className={`px-5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                                activeView === v.id
+                            key={tabId}
+                            onClick={() => setActiveView(tabId)}
+                            className={`px-5 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer capitalize ${
+                                activeView === tabId
                                     ? 'bg-white text-slate-950 shadow-md'
                                     : 'text-slate-400 hover:text-white'
                             }`}
                         >
-                            {v.label}
+                            {tabId === 'learning' ? 'Learning Path' : tabId}
                         </button>
                     ))}
                 </div>
 
                 {/* ════════════════════════════════════════════════ */}
-                {/* OVERVIEW VIEW                                  */}
+                {/* VIEW: OVERVIEW                                   */}
                 {/* ════════════════════════════════════════════════ */}
                 {activeView === 'overview' && (
-                    <div className="space-y-6">
-
-                        {/* Bento Row 1: KPIs */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            <CountBadge value={`${Math.round((totalHours / totalRequired) * 100)}%`} label="Overall Progress" gradient="linear-gradient(135deg, #06b6d4, #6366f1)" />
-                            <CountBadge value={`${totalHours}h`} label="Hours Logged" gradient="linear-gradient(135deg, #6366f1, #a855f7)" />
-                            <CountBadge value={xpPoints} label="XP Earned" gradient="linear-gradient(135deg, #f59e0b, #ef4444)" />
-                            <CountBadge value={modules.filter(m => m.status === 'done').length} label="Modules Done" gradient="linear-gradient(135deg, #10b981, #06b6d4)" />
+                    <div className="space-y-6 animate-in fade-in">
+                        {/* Bento metrics badges */}
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <CountBadge value={totalRequired > 0 ? `${Math.round((totalHours / totalRequired) * 100)}%` : '00%'} label="Overall Progress" gradient="linear-gradient(135deg, #06b6d4, #6366f1)" />
+                            <CountBadge value={totalHours > 0 ? `${totalHours}h` : '00h'} label="Hours Logged" gradient="linear-gradient(135deg, #6366f1, #a855f7)" />
+                            <CountBadge value={xpPoints > 0 ? xpPoints : '00'} label="XP Scored" gradient="linear-gradient(135deg, #f59e0b, #ef4444)" />
+                            <CountBadge value={enrolledCourses.length} label="Enrolled Courses" gradient="linear-gradient(135deg, #10b981, #06b6d4)" />
                         </div>
 
-                        {/* Bento Row 2: Progress + Profile */}
-                        <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                            {/* Roadmap Roadmap summary */}
+                            <div className="lg:col-span-8 space-y-6">
+                                <div className="bg-slate-900/20 border border-white/5 rounded-3xl p-6 backdrop-blur-md space-y-6">
+                                    <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                                        <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                            <GraduationCap className="w-4 h-4 text-indigo-400" /> Syllabus Roadmap Stages
+                                        </h3>
+                                        <button
+                                            onClick={() => setActiveView('learning')}
+                                            className="text-[10px] text-indigo-400 font-bold hover:text-indigo-300 flex items-center gap-0.5 cursor-pointer"
+                                        >
+                                            View Syllabus <ChevronRight className="w-3 h-3" />
+                                        </button>
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        {MOCK_COURSES.slice(0, 4).map((c, i) => {
+                                            const isEnrolled = enrolledCourses.includes(c.id);
+                                            const isLocked = i >= 2 && !isSubscribed && !isEnrolled;
+                                            return (
+                                                <div 
+                                                    key={c.id} 
+                                                    className={`p-5 rounded-2xl border transition-all flex flex-col justify-between h-36 ${
+                                                        isEnrolled 
+                                                            ? 'bg-indigo-950/10 border-indigo-500/20 shadow-md shadow-indigo-500/5' 
+                                                            : isLocked 
+                                                            ? 'bg-slate-950/60 border-slate-900 opacity-60'
+                                                            : 'bg-slate-900/30 border-white/5 hover:border-slate-800'
+                                                    }`}
+                                                >
+                                                    <div className="space-y-1">
+                                                        <span className="text-[8px] font-bold text-slate-500 uppercase tracking-widest font-mono">Stage #{i+1}</span>
+                                                        <h4 className="text-xs font-bold text-white line-clamp-1">{c.title}</h4>
+                                                        <p className="text-[10px] text-slate-500">{c.difficulty} level program</p>
+                                                    </div>
+                                                    <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5">
+                                                        <span className="text-[9px] text-slate-500 font-mono">{c.duration}</span>
+                                                        <button
+                                                            onClick={() => handleOpenCourse(c)}
+                                                            className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 flex items-center gap-0.5 cursor-pointer"
+                                                        >
+                                                            {isLocked ? 'Unlock' : isEnrolled ? 'Open Reader' : 'Start'}
+                                                            <ChevronRight className="w-3 h-3" />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
 
-                            {/* Module Progress — 3 cols */}
-                            <div className="lg:col-span-3 bg-slate-900/30 border border-slate-800/50 rounded-2xl p-6">
-                                <div className="flex items-center justify-between mb-5">
-                                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                                        <Layers className="w-4 h-4 text-cyan-400" /> Engineering Modules
+                                {/* Engineering modules hours progress */}
+                                <div className="bg-slate-900/20 border border-white/5 rounded-3xl p-6 backdrop-blur-md space-y-4">
+                                    <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                        <Layers className="w-4 h-4 text-indigo-400" /> Engineering Module Progress
                                     </h3>
-                                    <span className="text-[10px] text-slate-500 font-medium">{totalHours} / {totalRequired} hrs</span>
-                                </div>
-                                <div className="space-y-4">
-                                    {modules.map((mod, i) => (
-                                        <div key={i} className="group">
-                                            <div className="flex items-center gap-3 mb-1.5">
-                                                <div className={`p-1.5 rounded-lg ${mod.status === 'locked' ? 'bg-slate-800/40' : 'bg-slate-800/60'}`}>
-                                                    <mod.icon className="w-3.5 h-3.5" style={{ color: mod.color }} />
+                                    <div className="space-y-3">
+                                        {modules.map((mod, i) => (
+                                            <div key={i} className="space-y-1">
+                                                <div className="flex justify-between text-xs">
+                                                    <span className="text-slate-300 font-semibold">{mod.name}</span>
+                                                    <span className="text-slate-500 font-mono">{mod.hours}/{mod.total}h</span>
                                                 </div>
-                                                <span className={`text-xs font-semibold flex-1 ${mod.status === 'locked' ? 'text-slate-600' : 'text-slate-200'}`}>
-                                                    {mod.name}
-                                                </span>
-                                                {mod.status === 'done' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
-                                                {mod.status === 'active' && (
-                                                    <span className="text-[9px] font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded-md border border-cyan-500/20">ACTIVE</span>
-                                                )}
-                                                {mod.status === 'locked' && <XCircle className="w-3.5 h-3.5 text-slate-700" />}
-                                                <span className={`text-[10px] font-bold ${mod.status === 'locked' ? 'text-slate-700' : 'text-slate-400'}`}>
-                                                    {mod.hours}/{mod.total}h
-                                                </span>
+                                                <SparkBar value={mod.hours} max={mod.total} color={mod.color} height={4} />
                                             </div>
-                                            <SparkBar value={mod.hours} max={mod.total} color={mod.color} />
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Profile Card — 2 cols */}
-                            <div className="lg:col-span-2 bg-slate-900/30 border border-slate-800/50 rounded-2xl p-6 flex flex-col">
-                                <h3 className="text-sm font-bold text-white flex items-center gap-2 mb-5">
-                                    <User className="w-4 h-4 text-cyan-400" /> Your Profile
-                                </h3>
-                                <div className="flex-1 space-y-4">
-                                    <div className="flex items-center gap-3 py-2 border-b border-slate-800/40">
-                                        <Mail className="w-3.5 h-3.5 text-slate-600" />
-                                        <span className="text-xs text-slate-300 truncate">{user?.email}</span>
-                                    </div>
-                                    <div className="flex items-center gap-3 py-2 border-b border-slate-800/40">
-                                        <Calendar className="w-3.5 h-3.5 text-slate-600" />
-                                        <span className="text-xs text-slate-300">Age: {user?.age} years</span>
-                                    </div>
-                                    <div className="flex items-center gap-3 py-2 border-b border-slate-800/40">
-                                        <Shield className="w-3.5 h-3.5 text-slate-600" />
-                                        <span className="text-xs text-slate-300">Status: </span>
-                                        <span className={`text-xs font-bold ${user?.isActive !== false ? 'text-emerald-400' : 'text-red-400'}`}>
-                                            {user?.isActive !== false ? 'Active' : 'Suspended'}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap-3 py-2">
-                                        <Star className="w-3.5 h-3.5 text-slate-600" />
-                                        <span className="text-xs text-slate-300">Tier: <strong className="text-white">Apprentice III</strong></span>
-                                    </div>
-                                </div>
-
-                                {/* Compact Avatar Upload */}
-                                <form onSubmit={handleUpload} className="mt-4 pt-4 border-t border-slate-800/40">
-                                    <label className="flex items-center gap-3 px-3 py-2.5 bg-slate-950/60 border border-slate-800 border-dashed rounded-xl cursor-pointer hover:border-cyan-500/30 transition-all text-xs text-slate-500 hover:text-slate-300">
-                                        <Upload className="w-4 h-4 shrink-0" />
-                                        <span className="truncate">{file ? file.name : 'Change profile photo...'}</span>
-                                        <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-                                    </label>
-                                    {file && (
-                                        <Button type="submit" className="w-full mt-2 text-[10px] py-2" loading={uploading}>
-                                            Upload
-                                        </Button>
-                                    )}
-                                </form>
-                            </div>
-                        </div>
-
-                        {/* Bento Row 3: Timeline + Quick Actions */}
-                        <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
-
-                            {/* Activity Timeline — 3 cols */}
-                            <div className="lg:col-span-3 bg-slate-900/30 border border-slate-800/50 rounded-2xl p-6">
-                                <h3 className="text-sm font-bold text-white flex items-center gap-2 mb-5">
-                                    <Clock className="w-4 h-4 text-cyan-400" /> Recent Activity
-                                </h3>
-                                <div className="space-y-1">
-                                    {timeline.map((item, i) => {
-                                        const cfg = timelineIcons[item.type];
-                                        return (
-                                            <div key={i} className="flex items-start gap-3 py-3 border-b border-slate-800/30 last:border-0 hover:bg-slate-800/10 rounded-lg px-2 transition-all">
-                                                <div className={`p-2 rounded-lg ${cfg.bg} shrink-0 mt-0.5`}>
-                                                    <cfg.icon className={`w-3.5 h-3.5 ${cfg.color}`} />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-xs font-medium text-slate-200">{item.action}</p>
-                                                    <p className="text-[10px] text-slate-600 mt-0.5">{item.time}</p>
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-
-                            {/* Quick Actions Grid — 2 cols */}
-                            <div className="lg:col-span-2 space-y-5">
-                                <div className="bg-slate-900/30 border border-slate-800/50 rounded-2xl p-6">
-                                    <h3 className="text-sm font-bold text-white flex items-center gap-2 mb-4">
-                                        <Zap className="w-4 h-4 text-amber-400" /> Quick Actions
+                            {/* Right sidebars */}
+                            <div className="lg:col-span-4 space-y-6">
+                                {/* Timeline */}
+                                <div className="bg-slate-900/20 border border-white/5 rounded-3xl p-6 backdrop-blur-md">
+                                    <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2 mb-4">
+                                        <Clock className="w-4 h-4 text-indigo-400" /> Recent Actions
                                     </h3>
                                     <div className="space-y-2">
-                                        {[
-                                            { icon: PlayCircle, label: 'Resume Learning', desc: 'Continue React Ecosystem', color: 'cyan', action: () => setActiveView('learning') },
-                                            { icon: Video, label: 'Watch Recordings', desc: 'Latest lecture replays', color: 'violet' },
-                                            { icon: CreditCard, label: 'View Payments', desc: 'Transaction history', color: 'emerald', action: () => setActiveView('payments') },
-                                            { icon: MessageSquare, label: 'Get Support', desc: 'Chat with mentors', color: 'blue', action: () => navigate('/contact') },
-                                        ].map((act, i) => (
-                                            <button
-                                                key={i}
-                                                onClick={act.action}
-                                                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-950/40 border border-slate-800/40 hover:border-slate-700 hover:bg-slate-800/30 transition-all cursor-pointer group text-left"
-                                            >
-                                                <div className={`p-2 rounded-lg bg-${act.color}-500/10 border border-${act.color}-500/20`}>
-                                                    <act.icon className={`w-4 h-4 text-${act.color}-400`} />
+                                        {timeline.slice(0, 4).map((item, i) => {
+                                            const cfg = timelineIcons[item.type] || { icon: Award, color: 'text-amber-400', bg: 'bg-amber-500/10' };
+                                            return (
+                                                <div key={i} className="flex items-start gap-3 py-2 border-b border-slate-900/50 last:border-0">
+                                                    <div className={`p-1.5 rounded-lg ${cfg.bg} shrink-0 mt-0.5`}>
+                                                        <cfg.icon className={`w-3.5 h-3.5 ${cfg.color}`} />
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-xs font-medium text-slate-200 line-clamp-1">{item.action}</p>
+                                                        <p className="text-[9px] text-slate-600 mt-0.5">{item.time}</p>
+                                                    </div>
                                                 </div>
-                                                <div className="flex-1">
-                                                    <p className="text-xs font-semibold text-white">{act.label}</p>
-                                                    <p className="text-[10px] text-slate-600">{act.desc}</p>
-                                                </div>
-                                                <ChevronRight className="w-3.5 h-3.5 text-slate-700 group-hover:text-slate-400 transition-colors" />
-                                            </button>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 </div>
 
-                                {/* Achievements Compact */}
-                                <div className="bg-gradient-to-br from-cyan-950/20 to-indigo-950/20 border border-cyan-900/20 rounded-2xl p-5">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <Award className="w-4 h-4 text-amber-400" />
-                                        <h3 className="text-sm font-bold text-white">Achievements</h3>
+                                {/* Quick actions */}
+                                <div className="bg-slate-900/20 border border-white/5 rounded-3xl p-6 backdrop-blur-md space-y-3">
+                                    <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                                        <Zap className="w-4 h-4 text-amber-400" /> Quick actions
+                                    </h3>
+                                    <div className="flex flex-col gap-2">
+                                        <button 
+                                            onClick={() => setActiveView('learning')}
+                                            className="w-full flex items-center justify-between p-3 bg-slate-950/40 border border-white/5 hover:border-slate-800 rounded-xl transition-all cursor-pointer text-xs"
+                                        >
+                                            <span className="flex items-center gap-2"><PlayCircle className="w-3.5 h-3.5 text-indigo-400" /> Study Curriculum</span>
+                                            <ChevronRight className="w-3.5 h-3.5 text-slate-700" />
+                                        </button>
+                                        <button 
+                                            onClick={() => setActiveView('payments')}
+                                            className="w-full flex items-center justify-between p-3 bg-slate-950/40 border border-white/5 hover:border-slate-800 rounded-xl transition-all cursor-pointer text-xs"
+                                        >
+                                            <span className="flex items-center gap-2"><CreditCard className="w-3.5 h-3.5 text-emerald-400" /> Billing Settings</span>
+                                            <ChevronRight className="w-3.5 h-3.5 text-slate-700" />
+                                        </button>
+                                        <button 
+                                            onClick={() => navigate('/contact')}
+                                            className="w-full flex items-center justify-between p-3 bg-slate-950/40 border border-white/5 hover:border-slate-800 rounded-xl transition-all cursor-pointer text-xs"
+                                        >
+                                            <span className="flex items-center gap-2"><MessageSquare className="w-3.5 h-3.5 text-blue-400" /> Support Desk</span>
+                                            <ChevronRight className="w-3.5 h-3.5 text-slate-700" />
+                                        </button>
                                     </div>
-                                    <div className="flex gap-2">
-                                        {['🏆', '⚡', '🎯', '💎', '🔥'].map((emoji, i) => (
-                                            <div key={i} className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg ${
-                                                i < 3 ? 'bg-slate-800/60 border border-slate-700' : 'bg-slate-900/60 border border-slate-800/40 opacity-30'
-                                            }`}>
-                                                {emoji}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <p className="text-[10px] text-slate-600 mt-2">3 of 5 unlocked</p>
                                 </div>
                             </div>
                         </div>
@@ -382,148 +447,349 @@ const Dashboard = () => {
                 )}
 
                 {/* ════════════════════════════════════════════════ */}
-                {/* LEARNING PATH VIEW                             */}
+                {/* VIEW: LEARNING PATH                             */}
                 {/* ════════════════════════════════════════════════ */}
                 {activeView === 'learning' && (
-                    <div className="space-y-6">
-                        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                            <GraduationCap className="w-5 h-5 text-cyan-400" /> Your Learning Path
-                        </h2>
-
-                        {/* Enrolled Courses */}
-                        {courses.length > 0 && (
-                            <div className="space-y-4">
-                                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Enrolled Programs</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                                    {courses.map((course) => (
-                                        <div key={course._id} className="bg-slate-900/30 border border-slate-800/50 rounded-2xl p-5 hover:border-cyan-500/20 transition-all group">
-                                            <div className="flex items-start justify-between gap-2 mb-3">
-                                                <h4 className="text-sm font-bold text-white group-hover:text-cyan-300 transition-colors">{course.title}</h4>
-                                                <span className="text-[10px] text-cyan-400 font-bold bg-cyan-500/10 px-2 py-0.5 rounded-md border border-cyan-500/20 shrink-0">
-                                                    ${course.tuition}
-                                                </span>
-                                            </div>
-                                            <p className="text-xs text-slate-500 line-clamp-2 mb-4">{course.description}</p>
-                                            <div className="space-y-2">
-                                                <div className="flex justify-between text-[10px]">
-                                                    <span className="text-slate-500">Progress</span>
-                                                    <span className="text-cyan-400 font-bold">65%</span>
-                                                </div>
-                                                <SparkBar value={65} max={100} color="#06b6d4" height={4} />
-                                            </div>
-                                            <div className="flex items-center gap-3 mt-3 text-[10px] text-slate-600">
-                                                <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {course.weeks} weeks</span>
-                                                <span className="capitalize px-1.5 py-0.5 bg-slate-800/60 rounded border border-slate-800">{course.minimumSkill}</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Certifications Earned */}
-                        <div className="space-y-4">
-                            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest">Certifications Earned</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {[
-                                    { name: 'Frontend Development', icon: PenTool, issued: 'Mar 2026' },
-                                    { name: 'JavaScript Engineering', icon: Zap, issued: 'May 2026' },
-                                    { name: 'React Architecture', icon: Layers, issued: 'Jun 2026' },
-                                ].map((cert, i) => (
-                                    <div key={i} className="flex items-center gap-4 bg-slate-900/30 border border-slate-800/50 rounded-2xl p-4 hover:border-amber-500/20 transition-all">
-                                        <div className="p-3 bg-amber-500/10 border border-amber-500/15 rounded-xl">
-                                            <cert.icon className="w-5 h-5 text-amber-400" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-xs font-bold text-white">{cert.name}</p>
-                                            <p className="text-[10px] text-slate-500">Issued {cert.issued}</p>
-                                        </div>
-                                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                                    </div>
-                                ))}
-                            </div>
+                    <div className="space-y-6 animate-in fade-in">
+                        <div>
+                            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                                <GraduationCap className="w-5 h-5 text-indigo-400" /> Complete Syllabus Learning Path
+                            </h2>
+                            <p className="text-xs text-slate-500 mt-1">Free tier accounts can enroll in up to 2 courses. Subscribe to unlock the full 8-course backend and DevOps roadmap.</p>
                         </div>
 
-                        {/* Empty course state */}
-                        {courses.length === 0 && (
-                            <div className="bg-slate-900/30 border border-slate-800/50 rounded-2xl p-16 text-center">
-                                <BookOpen className="w-12 h-12 text-slate-700 mx-auto mb-4" />
-                                <p className="text-sm text-slate-400 font-medium">No courses enrolled yet</p>
-                                <p className="text-xs text-slate-600 mt-1 max-w-md mx-auto">Contact your admin or mentor to get assigned to a training program.</p>
-                            </div>
-                        )}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            {MOCK_COURSES.map((c, i) => {
+                                const isEnrolled = enrolledCourses.includes(c.id);
+                                const isLocked = i >= 2 && !isSubscribed && !isEnrolled;
+                                return (
+                                    <div 
+                                        key={c.id} 
+                                        className={`bg-slate-900/20 border rounded-2xl p-5 flex flex-col justify-between h-48 transition-all hover:border-slate-800 ${
+                                            isEnrolled ? 'border-indigo-500/30' : isLocked ? 'border-slate-950 bg-slate-950/40 opacity-70' : 'border-white/5'
+                                        }`}
+                                    >
+                                        <div className="space-y-2">
+                                            <div className="flex justify-between items-start">
+                                                <span className="text-[8px] font-bold px-2 py-0.5 rounded bg-slate-900 text-slate-500 uppercase tracking-widest">{c.category}</span>
+                                                {isLocked ? (
+                                                    <LockIcon className="w-3.5 h-3.5 text-slate-700" />
+                                                ) : isEnrolled ? (
+                                                    <UnlockIcon className="w-3.5 h-3.5 text-emerald-400" />
+                                                ) : (
+                                                    <UnlockIcon className="w-3.5 h-3.5 text-slate-500" />
+                                                )}
+                                            </div>
+                                            <h4 className="text-xs font-bold text-white line-clamp-1">{c.title}</h4>
+                                            <p className="text-[10px] text-slate-500 line-clamp-3">{c.chapters[0].content}</p>
+                                        </div>
+
+                                        <div className="flex justify-between items-center pt-3 border-t border-white/5 mt-4">
+                                            <span className="text-[9px] text-slate-500">{c.duration} • {c.difficulty}</span>
+                                            <button
+                                                onClick={() => handleOpenCourse(c)}
+                                                className={`text-[10px] font-bold flex items-center gap-0.5 cursor-pointer ${
+                                                    isLocked ? 'text-indigo-400' : 'text-white hover:text-indigo-300'
+                                                }`}
+                                            >
+                                                {isLocked ? 'Unlock' : isEnrolled ? 'Open Reader' : 'Start'}
+                                                <ChevronRight className="w-3 h-3" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 )}
 
                 {/* ════════════════════════════════════════════════ */}
-                {/* PAYMENTS VIEW                                  */}
+                {/* VIEW: PAYMENTS                                   */}
                 {/* ════════════════════════════════════════════════ */}
                 {activeView === 'payments' && (
-                    <div className="space-y-6">
-                        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                            <CreditCard className="w-5 h-5 text-emerald-400" /> Payments & Billing
-                        </h2>
+                    <div className="space-y-6 animate-in fade-in">
+                        <div>
+                            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                                <CreditCard className="w-5 h-5 text-indigo-400" /> Payments & Billing Console
+                            </h2>
+                            <p className="text-xs text-slate-500 mt-1">Audit simulated checkout logs, active passes, and trigger secure Razorpay gateways.</p>
+                        </div>
 
-                        {/* Summary Cards */}
+                        {/* Summary Metrics */}
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <div className="bg-slate-900/30 border border-slate-800/50 rounded-2xl p-5">
                                 <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Total Paid</p>
-                                <p className="text-2xl font-black text-emerald-400 mt-1">₹25,000</p>
+                                <p className="text-2xl font-black text-emerald-400 mt-1">
+                                    {totalPaid > 0 ? `$${totalPaid.toFixed(2)}` : '$00.00'}
+                                </p>
                             </div>
                             <div className="bg-slate-900/30 border border-slate-800/50 rounded-2xl p-5">
-                                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Pending</p>
-                                <p className="text-2xl font-black text-amber-400 mt-1">₹15,000</p>
+                                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Pending Balance</p>
+                                <p className="text-2xl font-black text-amber-400 mt-1">
+                                    {isSubscribed ? '$00.00' : '$199.00'}
+                                </p>
                             </div>
                             <div className="bg-slate-900/30 border border-slate-800/50 rounded-2xl p-5">
-                                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Next Due</p>
-                                <p className="text-2xl font-black text-white mt-1">01 Jul</p>
+                                <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold">Platform Tier</p>
+                                <p className="text-2xl font-black text-white mt-1">
+                                    {isSubscribed ? 'Premium Pass' : 'Trial Version'}
+                                </p>
                             </div>
                         </div>
 
-                        {/* Transaction History */}
-                        <div className="bg-slate-900/30 border border-slate-800/50 rounded-2xl overflow-hidden">
-                            <div className="px-6 py-4 border-b border-slate-800/50">
-                                <h3 className="text-sm font-bold text-white">Transaction History</h3>
+                        {/* Razorpay Gateway integration */}
+                        <div className="bg-gradient-to-br from-indigo-950/20 to-slate-900/40 border border-indigo-500/20 rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <div className="space-y-1">
+                                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                                    <Sparkles className="w-4 h-4 text-indigo-400" /> Secure Checkout via Razorpay
+                                </h3>
+                                <p className="text-xs text-slate-400 max-w-xl">
+                                    Deploy checkout fees using Razorpay's secure transactional billing page.
+                                </p>
                             </div>
-                            <div className="divide-y divide-slate-800/40">
-                                {[
-                                    { date: '15 Jun 2026', desc: 'Program Enrollment — Full Stack Batch', amount: '₹25,000', status: 'paid' },
-                                    { date: '01 Jul 2026', desc: 'Monthly Installment — July', amount: '₹15,000', status: 'pending' },
-                                    { date: '01 Aug 2026', desc: 'Monthly Installment — August', amount: '₹15,000', status: 'upcoming' },
-                                ].map((tx, i) => (
-                                    <div key={i} className="flex items-center gap-4 px-6 py-4 hover:bg-slate-800/10 transition-all">
-                                        <div className={`p-2 rounded-lg ${
-                                            tx.status === 'paid' ? 'bg-emerald-500/10' : tx.status === 'pending' ? 'bg-amber-500/10' : 'bg-slate-800/40'
-                                        }`}>
-                                            <CreditCard className={`w-4 h-4 ${
-                                                tx.status === 'paid' ? 'text-emerald-400' : tx.status === 'pending' ? 'text-amber-400' : 'text-slate-600'
-                                            }`} />
+                            <a
+                                href="https://rzp.io/l/deepitlabs-checkout" 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold py-3.5 px-6 rounded-xl transition-all cursor-pointer shadow-lg shadow-indigo-500/25 shrink-0"
+                            >
+                                Pay via Razorpay
+                            </a>
+                        </div>
+
+                        {/* Transaction history logs */}
+                        <div className="bg-slate-900/20 border border-white/5 rounded-3xl overflow-hidden">
+                            <div className="px-6 py-4 border-b border-white/5">
+                                <h3 className="text-xs font-bold text-white uppercase tracking-wider">Transaction Ledger</h3>
+                            </div>
+                            <div className="divide-y divide-slate-950">
+                                {myPayments.length === 0 ? (
+                                    <p className="text-slate-500 text-xs p-6 text-center">No transaction records registered.</p>
+                                ) : (
+                                    myPayments.map((tx, i) => (
+                                        <div key={i} className="flex items-center gap-4 px-6 py-4 hover:bg-slate-900/40 transition-all">
+                                            <div className="p-2 rounded-lg bg-indigo-500/10">
+                                                <CreditCard className="w-4 h-4 text-indigo-400" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-xs font-semibold text-white">{tx.description}</p>
+                                                <p className="text-[10px] text-slate-500">{new Date(tx.createdAt).toLocaleDateString()}</p>
+                                            </div>
+                                            <div className="text-right">
+                                                <span className="text-xs font-bold text-white block">
+                                                    ${tx.amount.toFixed(2)}
+                                                </span>
+                                                <span className="inline-flex items-center gap-1 text-[9px] text-emerald-400 font-semibold mt-0.5">
+                                                    <Check className="w-2.5 h-2.5" /> {tx.status}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="text-xs font-semibold text-white">{tx.desc}</p>
-                                            <p className="text-[10px] text-slate-600">{tx.date}</p>
-                                        </div>
-                                        <span className={`text-sm font-bold ${
-                                            tx.status === 'paid' ? 'text-emerald-400' : tx.status === 'pending' ? 'text-amber-400' : 'text-slate-600'
-                                        }`}>
-                                            {tx.amount}
-                                        </span>
-                                        <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-md border ${
-                                            tx.status === 'paid' 
-                                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
-                                                : tx.status === 'pending' 
-                                                ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' 
-                                                : 'bg-slate-800/40 text-slate-600 border-slate-800'
-                                        }`}>
-                                            {tx.status}
-                                        </span>
-                                    </div>
-                                ))}
+                                    ))
+                                )}
                             </div>
                         </div>
                     </div>
                 )}
+
             </div>
+
+            {/* ─── SLIDE-OVER READER PANEL ─── */}
+            {activeReadingCourse && (
+                <div className="fixed inset-0 z-50 overflow-hidden flex justify-end select-text">
+                    <div 
+                        onClick={() => setActiveReadingCourse(null)}
+                        className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm cursor-pointer"
+                    />
+
+                    <div className="relative w-full max-w-2xl bg-[#090A10] border-l border-white/5 h-full flex flex-col justify-between shadow-2xl animate-in slide-in-from-right duration-300">
+                        <div className="p-6 border-b border-white/5 flex justify-between items-start gap-4">
+                            <div>
+                                <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 uppercase tracking-widest">
+                                    {activeReadingCourse.category} Reader
+                                </span>
+                                <h3 className="text-base font-extrabold text-white mt-1.5">{activeReadingCourse.title}</h3>
+                            </div>
+                            <button 
+                                onClick={() => setActiveReadingCourse(null)}
+                                className="text-slate-500 hover:text-white transition-colors text-lg font-bold cursor-pointer"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <div className="flex-grow p-6 overflow-y-auto space-y-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                            <div className="flex gap-1 border-b border-slate-900 pb-2 overflow-x-auto">
+                                {activeReadingCourse.chapters.map((ch, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setActiveChapterIndex(idx)}
+                                        className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 transition-all cursor-pointer ${
+                                            activeChapterIndex === idx 
+                                                ? 'bg-indigo-600/10 text-indigo-300 border border-indigo-500/30' 
+                                                : 'text-slate-500 hover:text-slate-300'
+                                        }`}
+                                    >
+                                        Lecture {idx + 1}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="space-y-4">
+                                <h4 className="text-sm font-bold text-white">{activeReadingCourse.chapters[activeChapterIndex].title}</h4>
+                                <div className="bg-slate-950/60 border border-white/5 rounded-2xl p-6 text-xs text-slate-300 leading-relaxed font-sans select-text selection:bg-indigo-500/30">
+                                    {activeReadingCourse.chapters[activeChapterIndex].content}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="p-6 border-t border-white/5 flex justify-between items-center">
+                            <span className="text-[10px] text-slate-500">
+                                Chapter {activeChapterIndex + 1} of {activeReadingCourse.chapters.length}
+                            </span>
+                            <div className="flex gap-2">
+                                <Button 
+                                    disabled={activeChapterIndex === 0}
+                                    onClick={() => setActiveChapterIndex(prev => prev - 1)}
+                                    className="text-xs py-1.5 px-3 border border-slate-850 hover:bg-slate-900 bg-transparent disabled:opacity-40 disabled:pointer-events-none shadow-none"
+                                >
+                                    Previous
+                                </Button>
+                                <Button 
+                                    disabled={activeChapterIndex === activeReadingCourse.chapters.length - 1}
+                                    onClick={() => setActiveChapterIndex(prev => prev + 1)}
+                                    className="text-xs py-1.5 px-4 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:pointer-events-none"
+                                >
+                                    Next Chapter
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ─── MODAL CHECKOUT ─── */}
+            {showCheckoutModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div 
+                        onClick={() => setShowCheckoutModal(false)}
+                        className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm cursor-pointer"
+                    />
+
+                    <div className="relative w-full max-w-lg bg-[#090A10] border border-white/10 rounded-3xl p-6 shadow-2xl animate-in zoom-in-95 duration-200 space-y-6">
+                        <div className="flex justify-between items-start gap-4">
+                            <div className="space-y-1">
+                                <h3 className="text-base font-extrabold text-white flex items-center gap-2">
+                                    <Sparkles className="w-5 h-5 text-indigo-400" /> Platform Premium Subscription
+                                </h3>
+                                <p className="text-xs text-slate-400">
+                                    Free accounts are capped at a maximum of 2 courses. Subscribe to unlock the complete MERN stack learning paths immediately.
+                                </p>
+                            </div>
+                            <button 
+                                onClick={() => setShowCheckoutModal(false)}
+                                className="text-slate-500 hover:text-white transition-colors cursor-pointer text-lg font-bold"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <div className="flex gap-1 bg-slate-950 border border-slate-900 rounded-xl p-1 w-full">
+                            <button
+                                onClick={() => setCheckoutTab('card')}
+                                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                                    checkoutTab === 'card' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-300'
+                                }`}
+                            >
+                                Credit / Debit Card
+                            </button>
+                            <button
+                                onClick={() => setCheckoutTab('upi')}
+                                className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                                    checkoutTab === 'upi' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:text-slate-300'
+                                }`}
+                            >
+                                UPI Payment (Google Pay/PhonePe)
+                            </button>
+                        </div>
+
+                        <div className="p-4 bg-slate-950 border border-slate-900 rounded-2xl flex items-center justify-between gap-4">
+                            <span className="text-[10px] text-slate-500 leading-normal max-w-[250px]">
+                                Prefer using your external mobile browser or GPay/UPI app checkout links?
+                            </span>
+                            <a
+                                href="https://rzp.io/l/deepitlabs-checkout" 
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-indigo-600/10 hover:bg-indigo-600/20 border border-indigo-500/20 text-indigo-300 text-xs font-bold px-3 py-2 rounded-xl transition-all cursor-pointer text-center shrink-0"
+                            >
+                                Go to Razorpay
+                            </a>
+                        </div>
+
+                        <form onSubmit={handleLocalSubscribe} className="space-y-4">
+                            {checkoutTab === 'card' ? (
+                                <div className="space-y-4">
+                                    <Input
+                                        label="Cardholder Name"
+                                        value={cardHolder}
+                                        onChange={e => setCardHolder(e.target.value)}
+                                        required
+                                    />
+                                    <Input
+                                        label="Card Number"
+                                        placeholder="4242 4242 4242 4821"
+                                        value={cardNumber}
+                                        onChange={e => setCardNumber(e.target.value)}
+                                        required
+                                    />
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <Input
+                                            label="Expiry (MM/YY)"
+                                            placeholder="12/29"
+                                            value={cardExpiry}
+                                            onChange={e => setCardExpiry(e.target.value)}
+                                            required
+                                        />
+                                        <Input
+                                            label="CVV Code"
+                                            type="password"
+                                            placeholder="382"
+                                            value={cardCvv}
+                                            onChange={e => setCardCvv(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    <Input
+                                        label="UPI Virtual Private Address (VPA)"
+                                        placeholder="sandeep@upi"
+                                        value={upiId}
+                                        onChange={e => setUpiId(e.target.value)}
+                                        required
+                                    />
+                                    <div className="text-[10px] text-slate-500 leading-normal bg-slate-950/40 p-4 border border-slate-900 rounded-2xl flex items-start gap-2.5">
+                                        <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                                        <span>
+                                            Enter your active VPA (Google Pay, PhonePe, or Paytm virtual address). A payment request will be automatically dispatched to your UPI application.
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
+                            <Button 
+                                type="submit" 
+                                loading={checkoutMutation.isPending} 
+                                className="w-full mt-2 bg-indigo-600 hover:bg-indigo-500 py-3 text-xs font-bold rounded-xl"
+                            >
+                                Secure Pay $199.00
+                            </Button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };

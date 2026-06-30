@@ -16,6 +16,7 @@ const homeRoutes = require('./routes/homeRoutes');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const courseRoutes = require('./routes/courseRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 // Import error handler middleware
 const errorHandler = require('./middleware/error');
@@ -98,6 +99,7 @@ app.use("/", homeRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/courses", courseRoutes);
+app.use("/api/v1/payments", paymentRoutes);
 
 // ========================================================
 // 3. CENTRALIZED ERROR HANDLING MIDDLEWARE

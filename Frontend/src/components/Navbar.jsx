@@ -52,7 +52,7 @@ const Navbar = () => {
                             
                             {/* Admin or Mentor navigation routes */}
                             {(user.role === 'admin' || user.role === 'mentor') && (
-                                <NavLink to="/admin-panel" className={activeStyle}>Admin Panel</NavLink>
+                                <NavLink to="/admin/dashboard" className={activeStyle}>Admin Panel</NavLink>
                             )}
 
                             <NavLink to="/settings" className={activeStyle}>Settings</NavLink>
@@ -124,7 +124,7 @@ const Navbar = () => {
                             </NavLink>
                             {(user.role === 'admin' || user.role === 'mentor') && (
                                 <NavLink 
-                                    to="/admin-panel" 
+                                    to="/admin/dashboard" 
                                     onClick={() => setIsOpen(false)}
                                     className="text-base font-semibold py-1.5 text-gray-300"
                                 >

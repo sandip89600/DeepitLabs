@@ -8,6 +8,9 @@ const Home = () => {
     // Accordion state for FAQs
     const [faqOpen, setFaqOpen] = useState(null);
 
+    // Active slide step for workflow process slider
+    const [activeStep, setActiveStep] = useState(0);
+
     const toggleFaq = (index) => {
         setFaqOpen(faqOpen === index ? null : index);
     };
@@ -73,11 +76,11 @@ const Home = () => {
     ];
 
     const steps = [
-        { num: '01', title: 'Requirement Analysis', desc: 'We align on scope, deliverables, and technical architecture.' },
-        { num: '02', title: 'UI/UX Prototyping', desc: 'Our design studio shapes wireframes and interactive mockups.' },
-        { num: '03', title: 'Agile Coding Cycles', desc: 'Engineers construct code in iterations with regular demo reviews.' },
-        { num: '04', title: 'QA & Vulnerability Tests', desc: 'Rigorous unit, integration, and security checks are completed.' },
-        { num: '05', title: 'Deployment & Support', desc: 'Launching on secure cloud clusters with 24/7 logging monitoring.' }
+        { num: '01', title: 'Requirement Analysis', desc: 'We align on scope, deliverables, and technical architecture.', img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80' },
+        { num: '02', title: 'UI/UX Prototyping', desc: 'Our design studio shapes wireframes and interactive mockups.', img: 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=800&q=80' },
+        { num: '03', title: 'Agile Coding Cycles', desc: 'Engineers construct code in iterations with regular demo reviews.', img: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=800&q=80' },
+        { num: '04', title: 'QA & Vulnerability Tests', desc: 'Rigorous unit, integration, and security checks are completed.', img: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80' },
+        { num: '05', title: 'Deployment & Support', desc: 'Launching on secure cloud clusters with 24/7 logging monitoring.', img: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80' }
     ];
 
     const faqs = [
@@ -320,25 +323,90 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Process Section */}
-            <section className="py-24 bg-white/[0.02] border-y border-white/5 px-6 md:px-12">
-                <div className="max-w-7xl mx-auto">
+            {/* Process Section - Interactive Slider */}
+            <section className="py-24 bg-white/[0.02] border-y border-white/5 px-6 md:px-12 relative overflow-hidden">
+                {/* Background glow behind slider */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-indigo-500/5 blur-3xl pointer-events-none" />
+                
+                <div className="max-w-4xl mx-auto">
                     <div className="text-center mb-16 flex flex-col gap-3">
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-indigo-400 font-semibold">Our Workflow</span>
                         <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Our Development Process</h2>
                         <p className="text-gray-400 max-w-xl mx-auto text-sm md:text-base">
                             An optimized roadmap ensuring maximum quality controls from inception to production deployment.
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                        {steps.map((step, index) => (
-                            <div key={index} className="bg-[#06070D] border border-white/5 p-6 rounded-xl relative overflow-hidden">
-                                <span className="absolute -top-4 -right-2 text-6xl font-extrabold text-white/[0.04] select-none font-mono">{step.num}</span>
-                                <span className="inline-block w-8 h-0.5 bg-gradient-to-r from-violet-400 to-cyan-400 mb-4 relative z-10" />
-                                <h4 className="text-base font-bold text-white mb-2 relative z-10">{step.title}</h4>
-                                <p className="text-gray-500 text-xs leading-relaxed relative z-10">{step.desc}</p>
+                    {/* Slider Main View - Flyer Slider with Background Image */}
+                    <div 
+                        className="relative rounded-3xl p-8 md:p-12 shadow-2xl overflow-hidden min-h-[300px] flex flex-col justify-between group border border-white/10 transition-all duration-500 bg-slate-900"
+                        style={{
+                            backgroundImage: `url(${steps[activeStep].img})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                        }}
+                    >
+                        {/* Dark gradient overlay for text readability */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/90 to-slate-950/40 group-hover:via-slate-950/80 transition-all duration-300 pointer-events-none" />
+
+                        {/* Top Indicator bar */}
+                        <div className="flex gap-2 w-full mb-8 relative z-10">
+                            {steps.map((_, idx) => (
+                                <div 
+                                    key={idx} 
+                                    onClick={() => setActiveStep(idx)}
+                                    className="flex-1 h-1 rounded-full cursor-pointer overflow-hidden bg-white/20"
+                                >
+                                    <div 
+                                        className={`h-full rounded-full bg-indigo-400 transition-all duration-300 ${
+                                            idx === activeStep ? 'w-full' : idx < activeStep ? 'w-full opacity-30' : 'w-0'
+                                        }`}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Active Slide Content */}
+                        <div className="space-y-3 relative z-10 animate-in fade-in slide-in-from-left-5 duration-300">
+                            <span className="text-[10px] font-mono text-indigo-400 font-bold uppercase tracking-widest bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-full w-fit block">
+                                Stage {steps[activeStep].num}
+                            </span>
+                            <h3 className="text-2xl md:text-3xl font-black text-white leading-tight">{steps[activeStep].title}</h3>
+                            <p className="text-slate-300 text-xs md:text-sm leading-relaxed max-w-2xl">{steps[activeStep].desc}</p>
+                        </div>
+
+                        {/* Navigation controls */}
+                        <div className="flex justify-between items-center mt-12 relative z-10">
+                            {/* Dot selectors */}
+                            <div className="flex gap-2">
+                                {steps.map((_, idx) => (
+                                    <button 
+                                        key={idx}
+                                        onClick={() => setActiveStep(idx)}
+                                        className={`w-2 h-2 rounded-full transition-all cursor-pointer ${
+                                            idx === activeStep ? 'bg-white w-5' : 'bg-white/40 hover:bg-white/60'
+                                        }`}
+                                    />
+                                ))}
                             </div>
-                        ))}
+                            
+                            {/* Arrow actions */}
+                            <div className="flex gap-2.5">
+                                <button 
+                                    onClick={() => setActiveStep(prev => (prev === 0 ? steps.length - 1 : prev - 1))}
+                                    className="w-9 h-9 rounded-lg border border-white/10 bg-slate-950/70 hover:bg-slate-900 text-white flex items-center justify-center transition-all cursor-pointer active:scale-95 text-sm"
+                                >
+                                    ←
+                                </button>
+                                <button 
+                                    onClick={() => setActiveStep(prev => (prev === steps.length - 1 ? 0 : prev + 1))}
+                                    className="w-9 h-9 rounded-lg border border-white/10 bg-slate-950/70 hover:bg-slate-900 text-white flex items-center justify-center transition-all cursor-pointer active:scale-95 text-sm"
+                                >
+                                    →
+                                </button>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </section>

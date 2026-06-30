@@ -42,7 +42,7 @@ const RegisterForm = () => {
         if (res.success) {
             addNotification('Registration successful! Welcome to the portal.', 'success');
             if (res.role === 'admin' || res.role === 'mentor') {
-                navigate('/admin-panel');
+                navigate('/admin/dashboard');
             } else {
                 navigate('/dashboard');
             }
