@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create central Axios instance pointing to the Express server API v1
 const api = axios.create({
-    baseURL: 'http://localhost:3000/api/v1',
+    baseURL: import.meta.env.VITE_API_URL || 'https://deepitlabs.onrender.com/api/v1',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json'
