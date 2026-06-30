@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Any custom styles or font settings can go here. We will use Tailwind v4 utility classes. */
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background-color: #0b0f19;
+  color: #f3f4f6;
+}

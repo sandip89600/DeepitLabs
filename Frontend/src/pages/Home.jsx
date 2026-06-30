@@ -1,0 +1,247 @@
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+const Home = () => {
+    // Accordion state for FAQs
+    const [faqOpen, setFaqOpen] = useState(null);
+
+    const toggleFaq = (index) => {
+        setFaqOpen(faqOpen === index ? null : index);
+    };
+
+    const stats = [
+        { value: '150+', label: 'Projects Completed' },
+        { value: '98%', label: 'Client Retention' },
+        { value: '15+', label: 'Years Experience' },
+        { value: '40+', label: 'Core Developers' }
+    ];
+
+    const services = [
+        {
+            title: 'MERN Stack Applications',
+            desc: 'Custom engineered web applications utilizing React, Node.js, Express, and MongoDB for fast, scalable solutions.',
+            icon: '💻'
+        },
+        {
+            title: 'Custom CRM & ERP Platforms',
+            desc: 'Custom workforce administration software, CRM, and ERP modules tailored to optimize your workflow.',
+            icon: '🏢'
+        },
+        {
+            title: 'Dashboards & Admin Panels',
+            desc: 'High-speed, responsive dashboards presenting real-time business aggregations and data metrics.',
+            icon: '📊'
+        },
+        {
+            title: 'Enterprise API Development',
+            desc: 'Safe, microservices-driven RESTful APIs and integrations developed using industry-standard architectures.',
+            icon: '🔗'
+        },
+        {
+            title: 'Mobile App Engineering',
+            desc: 'Seamless hybrid and native mobile apps built using React Native and Flutter for iOS and Android platforms.',
+            icon: '📱'
+        },
+        {
+            title: 'UI/UX Design Studio',
+            desc: 'Visual mockups, wireframing, and premium product designs built with high focus on human-centered interaction.',
+            icon: '🎨'
+        }
+    ];
+
+    const steps = [
+        { num: '01', title: 'Requirement Analysis', desc: 'We align on scope, deliverables, and technical architecture.' },
+        { num: '02', title: 'UI/UX Prototyping', desc: 'Our design studio shapes wireframes and interactive mockups.' },
+        { num: '03', title: 'Agile Coding Cycles', desc: 'Engineers construct code in iterations with regular demo reviews.' },
+        { num: '04', title: 'QA & Vulnerability Tests', desc: 'Rigorous unit, integration, and security checks are completed.' },
+        { num: '05', title: 'Deployment & Support', desc: 'Launching on secure cloud clusters with 24/7 logging monitoring.' }
+    ];
+
+    const faqs = [
+        { q: 'What industries does Deep IT Labs specialize in?', a: 'We specialize in SaaS platforms, Fintech, Healthcare systems, Admin Dashboards, CRM/ERP integrations, and E-commerce platforms.' },
+        { q: 'How do you handle project management?', a: 'We use the Agile Scrum framework, organizing weekly sprints, providing staging environments for updates, and maintaining Slack/Teams channels.' },
+        { q: 'Can you work with our existing technical team?', a: 'Yes! We commonly co-develop alongside in-house technical teams, offering specialized support in MERN development, cloud setups, or custom migrations.' }
+    ];
+
+    return (
+        <div className="bg-[#06070D] text-white min-h-screen">
+            {/* Hero Section — layered circuit/grid background, no stock photography needed */}
+            <section className="relative overflow-hidden py-28 md:py-36 px-6 md:px-12 text-center">
+                {/* Background layer 1: fine grid */}
+                <div
+                    className="absolute inset-0 opacity-[0.07]"
+                    style={{
+                        backgroundImage:
+                            'linear-gradient(to right, #8B7CFF 1px, transparent 1px), linear-gradient(to bottom, #8B7CFF 1px, transparent 1px)',
+                        backgroundSize: '56px 56px',
+                        maskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 40%, transparent 90%)',
+                        WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black 40%, transparent 90%)'
+                    }}
+                />
+
+                {/* Background layer 2: circuit-trace SVG, sits behind content, faint */}
+                <svg
+                    className="absolute inset-0 w-full h-full opacity-[0.16] pointer-events-none"
+                    preserveAspectRatio="xMidYMid slice"
+                    viewBox="0 0 1200 600"
+                    fill="none"
+                >
+                    <g stroke="#6D5AE0" strokeWidth="1">
+                        <path d="M0 120 H260 V40 H520" />
+                        <path d="M1200 90 H940 V200 H700 V70" />
+                        <path d="M0 480 H180 V560 H460" />
+                        <path d="M1200 520 H960 V420 H760 V500" />
+                        <path d="M520 40 V0" />
+                        <path d="M700 70 V0" />
+                        <path d="M460 560 V600" />
+                        <path d="M760 500 V600" />
+                    </g>
+                    <g fill="#2DD4BF">
+                        <circle cx="260" cy="120" r="4" />
+                        <circle cx="520" cy="40" r="4" />
+                        <circle cx="940" cy="90" r="4" />
+                        <circle cx="700" cy="200" r="4" />
+                        <circle cx="180" cy="480" r="4" />
+                        <circle cx="460" cy="560" r="4" />
+                        <circle cx="960" cy="520" r="4" />
+                        <circle cx="760" cy="420" r="4" />
+                    </g>
+                </svg>
+
+                {/* Background layer 3: dual glow, violet + cyan, gives depth and color richness */}
+                <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(124,92,252,0.22)_0%,transparent_70%)] blur-2xl" />
+                <div className="absolute top-20 right-0 w-[420px] h-[420px] rounded-full bg-[radial-gradient(circle,rgba(45,212,191,0.16)_0%,transparent_70%)] blur-2xl" />
+
+                <div className="relative max-w-4xl mx-auto flex flex-col gap-6">
+                    <span className="inline-flex items-center gap-2 self-center bg-violet-500/10 text-violet-300 text-xs font-mono font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full border border-violet-500/25">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                        Enterprise Software Engineering
+                    </span>
+                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
+                        Engineering Premium <br />
+                        <span className="bg-gradient-to-r from-violet-300 via-violet-400 to-cyan-300 bg-clip-text text-transparent">
+                            Custom Web Applications
+                        </span>
+                    </h1>
+                    <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                        Deep IT Labs builds production-ready software solutions, high-speed dashboards, and custom SaaS platforms designed exactly for your scale.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center mt-4">
+                        <Link to="/contact" className="bg-violet-600 hover:bg-violet-500 text-white font-semibold px-8 py-3.5 rounded-lg shadow-lg shadow-violet-500/25 transition-all text-base">
+                            Start Your Project
+                        </Link>
+                        <Link to="/portfolio" className="bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white font-semibold px-8 py-3.5 rounded-lg transition-all text-base backdrop-blur-sm">
+                            View Case Studies
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* Statistics */}
+            <section className="border-y border-white/5 bg-[#06070D] py-12 px-6 md:px-12">
+                <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    {stats.map((stat, idx) => (
+                        <div key={idx} className="flex flex-col gap-1">
+                            <span className="text-3xl md:text-5xl font-extrabold bg-gradient-to-br from-white to-violet-300 bg-clip-text text-transparent">
+                                {stat.value}
+                            </span>
+                            <span className="text-gray-500 text-sm font-medium">{stat.label}</span>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* Services Section */}
+            <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto">
+                <div className="text-center mb-16 flex flex-col gap-3">
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Our Core Services</h2>
+                    <p className="text-gray-400 max-w-xl mx-auto text-sm md:text-base">
+                        From cloud architecture to design mockups, we engineer digital products with speed, security, and responsive layouts.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {services.map((service, index) => (
+                        <div key={index} className="group bg-white/[0.03] border border-white/5 p-8 rounded-xl hover:border-violet-500/40 hover:bg-white/[0.05] transition-all duration-300">
+                            <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-gradient-to-br from-violet-500/15 to-cyan-500/10 text-2xl mb-5 group-hover:from-violet-500/25 group-hover:to-cyan-500/20 transition-all">
+                                {service.icon}
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
+                            <p className="text-gray-400 text-sm leading-relaxed">{service.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* Process Section */}
+            <section className="py-24 bg-white/[0.02] border-y border-white/5 px-6 md:px-12">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16 flex flex-col gap-3">
+                        <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Our Development Process</h2>
+                        <p className="text-gray-400 max-w-xl mx-auto text-sm md:text-base">
+                            An optimized roadmap ensuring maximum quality controls from inception to production deployment.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+                        {steps.map((step, index) => (
+                            <div key={index} className="bg-[#06070D] border border-white/5 p-6 rounded-xl relative overflow-hidden">
+                                <span className="absolute -top-4 -right-2 text-6xl font-extrabold text-white/[0.04] select-none font-mono">{step.num}</span>
+                                <span className="inline-block w-8 h-0.5 bg-gradient-to-r from-violet-400 to-cyan-400 mb-4 relative z-10" />
+                                <h4 className="text-base font-bold text-white mb-2 relative z-10">{step.title}</h4>
+                                <p className="text-gray-500 text-xs leading-relaxed relative z-10">{step.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* FAQs */}
+            <section className="py-24 px-6 md:px-12 max-w-3xl mx-auto">
+                <div className="text-center mb-16 flex flex-col gap-3">
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Frequently Asked Questions</h2>
+                    <p className="text-gray-400 text-sm md:text-base">
+                        Get answers to common queries regarding working with Deep IT Labs.
+                    </p>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                    {faqs.map((faq, idx) => (
+                        <div key={idx} className="bg-white/[0.03] border border-white/5 rounded-lg overflow-hidden">
+                            <button
+                                onClick={() => toggleFaq(idx)}
+                                className="w-full text-left px-6 py-4 flex justify-between items-center text-sm md:text-base font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:ring-inset"
+                            >
+                                <span>{faq.q}</span>
+                                <span className="text-cyan-400 font-bold text-lg leading-none">{faqOpen === idx ? '−' : '+'}</span>
+                            </button>
+                            {faqOpen === idx && (
+                                <div className="px-6 pb-5 pt-1 text-gray-400 text-xs md:text-sm border-t border-white/5 leading-relaxed">
+                                    {faq.a}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* CTA Section */}
+            <section className="py-16 px-6 md:px-12 max-w-7xl mx-auto">
+                <div className="relative overflow-hidden bg-gradient-to-r from-violet-950/50 via-[#0B0E1A] to-cyan-950/30 border border-white/10 p-12 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+                    <div className="absolute -right-10 -top-10 w-56 h-56 rounded-full bg-cyan-500/10 blur-3xl" />
+                    <div className="relative flex flex-col gap-2">
+                        <h2 className="text-2xl md:text-3xl font-bold">Have a custom software concept?</h2>
+                        <p className="text-gray-400 max-w-lg text-sm">
+                            Connect with our tech leads today to scope your architecture and get a cost-estimation estimate.
+                        </p>
+                    </div>
+                    <Link to="/contact" className="relative bg-white hover:bg-gray-100 text-[#06070D] font-bold px-8 py-3.5 rounded-lg shadow-xl shadow-violet-500/10 transition-all text-base shrink-0">
+                        Get Free Estimation
+                    </Link>
+                </div>
+            </section>
+        </div>
+    );
+};
+
+export default Home;
