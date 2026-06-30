@@ -33,8 +33,32 @@ app.use(compression());
 app.use(helmet());
 
 // Enable Cross-Origin Resource Sharing (CORS) with explicit origin configuration
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'https://www.deepitlabs.in'
+];
+
+if (process.env.CLIENT_URL) {
+    process.env.CLIENT_URL.split(',').forEach(url => {
+        const trimmed = url.trim();
+        if (trimmed && !allowedOrigins.includes(trimmed)) {
+            allowedOrigins.push(trimmed);
+        }
+    });
+}
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, postman, or curl)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error(`Origin ${origin} not allowed by CORS`), false);
+        }
+    },
     credentials: true // Crucial to allow transfer of secure refresh token cookies
 }));
 
