@@ -34,7 +34,7 @@ app.use(helmet());
 
 // Enable Cross-Origin Resource Sharing (CORS) with explicit origin configuration
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'https://www.deepitlabs.in',
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
     credentials: true // Crucial to allow transfer of secure refresh token cookies
 }));
 
