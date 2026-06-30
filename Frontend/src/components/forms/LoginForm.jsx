@@ -35,7 +35,11 @@ const LoginForm = () => {
 
         if (res.success) {
             addNotification('Login successful! Welcome back.', 'success');
-            navigate('/dashboard');
+            if (res.role === 'admin' || res.role === 'mentor') {
+                navigate('/admin-panel');
+            } else {
+                navigate('/dashboard');
+            }
         } else {
             addNotification(res.error || 'Invalid credentials', 'error');
         }

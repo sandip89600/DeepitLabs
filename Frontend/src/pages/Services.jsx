@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useCMSConfig } from '../services/cms';
 
 const Services = () => {
-    const list = [
+    const { data: cms } = useCMSConfig();
+    
+    const rawList = cms?.services || [
         {
             title: 'MERN Stack Development',
             desc: 'Custom structured SPA and SSR web applications built using React.js for client interfaces, Express/Node.js for routing controller services, and MongoDB Atlas for database persistence.',
@@ -24,6 +27,15 @@ const Services = () => {
             features: ['Figma Wireframing', 'Responsive UI Layout Systems', 'Micro-Animations Design', 'Human-Centered Interactions']
         }
     ];
+
+    const list = rawList.map(s => ({
+        ...s,
+        features: s.features || [
+            'Dynamic real-time dashboard tracking',
+            'Modular microservice architectural style',
+            'Full database integration support'
+        ]
+    }));
 
     return (
         <div className="bg-slate-950 text-white min-h-screen py-16 px-6 md:px-12">

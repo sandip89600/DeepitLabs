@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { useCMSConfig } from "../services/cms";
 
 const Portfolio = () => {
+  const { data: cms } = useCMSConfig();
   const [filter, setFilter] = useState("All");
 
   const categories = ["All", "SaaS", "ERP/CRM", "API Integration"];
 
-  const projects = [
+  const rawProjects = cms?.projects || [
     {
       title: "SaaS Analytics Dashboard",
       category: "SaaS",
@@ -47,6 +49,11 @@ const Portfolio = () => {
       metricTitle: "Students",
     },
   ];
+
+  const projects = rawProjects.map(p => ({
+    ...p,
+    tags: p.tags || ["MERN", "React", "Cloud"]
+  }));
 
   const filteredProjects =
     filter === "All"

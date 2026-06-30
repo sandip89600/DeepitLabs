@@ -1,8 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useCMSConfig } from '../services/cms';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
+    const { data: cms } = useCMSConfig();
+    const brandName = cms?.brandName || 'Deep IT Labs';
+    const email = cms?.contactEmail || 'info@deepitlabs.in';
+    const phone = cms?.contactPhone || '+91 7058222107';
 
     return (
         <footer className="bg-slate-950 border-t border-slate-900 text-gray-400 py-16 px-6 md:px-12">
@@ -10,14 +15,14 @@ const Footer = () => {
                 {/* Column 1: Company Profile */}
                 <div className="flex flex-col gap-4">
                     <Link to="/" className="text-xl font-bold tracking-tight text-white bg-gradient-to-r from-white to-indigo-400 bg-clip-text text-transparent">
-                        Deep IT Labs
+                        {brandName}
                     </Link>
                     <p className="text-sm leading-relaxed text-gray-400">
                         A premium software development agency engineering custom cloud software, MERN applications, CRM/ERP platforms, and modern SaaS products for global clients.
                     </p>
                     <div className="text-sm text-gray-500">
-                        <p>info@deepitlabs.com</p>
-                        <p>+1 (555) 019-2834</p>
+                        <p>{email}</p>
+                        <p>{phone}</p>
                     </div>
                 </div>
 

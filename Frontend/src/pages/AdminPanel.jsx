@@ -22,7 +22,10 @@ import {
     Clock,
     CheckCircle2,
     XCircle,
-    Eye
+    Eye,
+    Globe,
+    FileText,
+    Settings as ConfigIcon
 } from 'lucide-react';
 
 // ─── Mini Bar Chart Component (CSS-only) ────────────────────────
@@ -92,6 +95,280 @@ const DonutChart = ({ data }) => {
     );
 };
 
+// ─── Frontend Config CMS Manager component ─────────────────────
+const CmsManager = ({ initialConfig, onSave, isSaving }) => {
+    const [form, setForm] = useState(initialConfig);
+    const [subTab, setSubTab] = useState('general');
+
+    const handleFieldChange = (key, value) => {
+        setForm(prev => ({ ...prev, [key]: value }));
+    };
+
+    const handleNestedChange = (section, index, key, value) => {
+        setForm(prev => {
+            const list = [...prev[section]];
+            list[index] = { ...list[index], [key]: value };
+            return { ...prev, [section]: list };
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSave(form);
+    };
+
+    if (!form) return null;
+
+    return (
+        <form onSubmit={handleSubmit} className="space-y-6 animate-in fade-in">
+            {/* Sub-navigation inside CMS */}
+            <div className="flex flex-wrap gap-2 border-b border-slate-800 pb-4">
+                {['general', 'home', 'about', 'services', 'portfolio'].map(tabId => (
+                    <button
+                        type="button"
+                        key={tabId}
+                        onClick={() => setSubTab(tabId)}
+                        className={`px-3.5 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+                            subTab === tabId
+                                ? 'bg-indigo-500/15 text-indigo-400 border border-indigo-500/30'
+                                : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+                        }`}
+                    >
+                        {tabId}
+                    </button>
+                ))}
+            </div>
+
+            {/* Sub-panel: General */}
+            {subTab === 'general' && (
+                <div className="space-y-4 bg-slate-900/20 border border-slate-800/60 rounded-2xl p-6">
+                    <h3 className="text-sm font-bold text-white mb-2">Global Settings & Contact Branding</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Input
+                            label="Brand Name"
+                            value={form.brandName || ''}
+                            onChange={e => handleFieldChange('brandName', e.target.value)}
+                            required
+                        />
+                        <Input
+                            label="Contact Email"
+                            value={form.contactEmail || ''}
+                            onChange={e => handleFieldChange('contactEmail', e.target.value)}
+                            required
+                        />
+                        <Input
+                            label="Contact Phone"
+                            value={form.contactPhone || ''}
+                            onChange={e => handleFieldChange('contactPhone', e.target.value)}
+                            required
+                        />
+                        <Input
+                            label="Headquarters Location"
+                            value={form.headquarters || ''}
+                            onChange={e => handleFieldChange('headquarters', e.target.value)}
+                            required
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Sub-panel: Home */}
+            {subTab === 'home' && (
+                <div className="space-y-4 bg-slate-900/20 border border-slate-800/60 rounded-2xl p-6">
+                    <h3 className="text-sm font-bold text-white mb-2">Home Page Hero Configs</h3>
+                    <Input
+                        label="Hero Title text"
+                        value={form.heroTitle || ''}
+                        onChange={e => handleFieldChange('heroTitle', e.target.value)}
+                        required
+                    />
+                    <div>
+                        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Hero Description text</label>
+                        <textarea
+                            className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all h-24 resize-none"
+                            value={form.heroDesc || ''}
+                            onChange={e => handleFieldChange('heroDesc', e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <h3 className="text-sm font-bold text-white mt-6 mb-2">Hero Analytics statistics</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        {form.stats?.map((stat, i) => (
+                            <div key={i} className="p-4 bg-slate-950 border border-slate-850 rounded-xl space-y-2">
+                                <span className="text-[10px] text-indigo-400 font-mono">Stat #{i+1}</span>
+                                <Input
+                                    label="Value text"
+                                    value={stat.value || ''}
+                                    onChange={e => handleNestedChange('stats', i, 'value', e.target.value)}
+                                    required
+                                />
+                                <Input
+                                    label="Label text"
+                                    value={stat.label || ''}
+                                    onChange={e => handleNestedChange('stats', i, 'label', e.target.value)}
+                                    required
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Sub-panel: About */}
+            {subTab === 'about' && (
+                <div className="space-y-4 bg-slate-900/20 border border-slate-800/60 rounded-2xl p-6">
+                    <h3 className="text-sm font-bold text-white mb-2">About Page Core Narrative</h3>
+                    <div>
+                        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Mission statement</label>
+                        <textarea
+                            className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all h-24 resize-none"
+                            value={form.aboutMission || ''}
+                            onChange={e => handleFieldChange('aboutMission', e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Vision statement</label>
+                        <textarea
+                            className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all h-24 resize-none"
+                            value={form.aboutVision || ''}
+                            onChange={e => handleFieldChange('aboutVision', e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <h3 className="text-sm font-bold text-white mt-6 mb-2">Core Values</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {form.aboutValues?.map((val, i) => (
+                            <div key={i} className="p-4 bg-slate-950 border border-slate-850 rounded-xl space-y-2">
+                                <span className="text-[10px] text-indigo-400 font-mono">Value #{i+1}</span>
+                                <Input
+                                    label="Title text"
+                                    value={val.title || ''}
+                                    onChange={e => handleNestedChange('aboutValues', i, 'title', e.target.value)}
+                                    required
+                                />
+                                <Input
+                                    label="Icon Emoji"
+                                    value={val.icon || ''}
+                                    onChange={e => handleNestedChange('aboutValues', i, 'icon', e.target.value)}
+                                    required
+                                />
+                                <div>
+                                    <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Description text</label>
+                                    <textarea
+                                        className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-lg px-4 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all h-16 resize-none"
+                                        value={val.desc || ''}
+                                        onChange={e => handleNestedChange('aboutValues', i, 'desc', e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Sub-panel: Services */}
+            {subTab === 'services' && (
+                <div className="space-y-4 bg-slate-900/20 border border-slate-800/60 rounded-2xl p-6">
+                    <h3 className="text-sm font-bold text-white mb-2">Core Services Configurations</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {form.services?.map((serv, i) => (
+                            <div key={i} className="p-4 bg-slate-950 border border-slate-850 rounded-xl space-y-2">
+                                <span className="text-[10px] text-indigo-400 font-mono">Service #{i+1}</span>
+                                <Input
+                                    label="Title text"
+                                    value={serv.title || ''}
+                                    onChange={e => handleNestedChange('services', i, 'title', e.target.value)}
+                                    required
+                                />
+                                <Input
+                                    label="Icon Emoji"
+                                    value={serv.icon || ''}
+                                    onChange={e => handleNestedChange('services', i, 'icon', e.target.value)}
+                                    required
+                                />
+                                <div>
+                                    <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Description text</label>
+                                    <textarea
+                                        className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-lg px-4 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all h-20 resize-none"
+                                        value={serv.desc || ''}
+                                        onChange={e => handleNestedChange('services', i, 'desc', e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Sub-panel: Portfolio */}
+            {subTab === 'portfolio' && (
+                <div className="space-y-4 bg-slate-900/20 border border-slate-800/60 rounded-2xl p-6">
+                    <h3 className="text-sm font-bold text-white mb-2">Portfolio Case Studies</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {form.projects?.map((proj, i) => (
+                            <div key={i} className="p-4 bg-slate-950 border border-slate-850 rounded-xl space-y-2">
+                                <span className="text-[10px] text-indigo-400 font-mono">Project #{i+1}</span>
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Input
+                                        label="Title text"
+                                        value={proj.title || ''}
+                                        onChange={e => handleNestedChange('projects', i, 'title', e.target.value)}
+                                        required
+                                    />
+                                    <Input
+                                        label="Category"
+                                        value={proj.category || ''}
+                                        onChange={e => handleNestedChange('projects', i, 'category', e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <Input
+                                    label="Image URL link"
+                                    value={proj.image || ''}
+                                    onChange={e => handleNestedChange('projects', i, 'image', e.target.value)}
+                                    required
+                                />
+                                <div className="grid grid-cols-2 gap-2">
+                                    <Input
+                                        label="Key Metric"
+                                        value={proj.metric || ''}
+                                        onChange={e => handleNestedChange('projects', i, 'metric', e.target.value)}
+                                        required
+                                    />
+                                    <Input
+                                        label="Metric Label"
+                                        value={proj.metricTitle || ''}
+                                        onChange={e => handleNestedChange('projects', i, 'metricTitle', e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Description text</label>
+                                    <textarea
+                                        className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-lg px-4 py-2 text-xs text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/40 transition-all h-20 resize-none"
+                                        value={proj.desc || ''}
+                                        onChange={e => handleNestedChange('projects', i, 'desc', e.target.value)}
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            <Button type="submit" loading={isSaving} className="w-full mt-4 bg-indigo-600 hover:bg-indigo-500">
+                Save Configurations
+            </Button>
+        </form>
+    );
+};
+
 // ═══════════════════════════════════════════════════════════════
 // ADMIN DASHBOARD PANEL
 // ═══════════════════════════════════════════════════════════════
@@ -100,6 +377,40 @@ const AdminPanel = () => {
     const queryClient = useQueryClient();
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState('overview');
+
+    // CMS dynamic frontend configuration fetching and mutation
+    const { data: cmsConfig, isLoading: loadingCms } = useQuery({
+        queryKey: ['cmsConfigAdmin'],
+        queryFn: async () => {
+            const res = await api.get('/users/frontend-config');
+            return res.data.data;
+        }
+    });
+
+    const cmsMutation = useMutation({
+        mutationFn: async (updatedConfig) => {
+            const res = await api.put('/users/frontend-config', updatedConfig);
+            return res.data.data;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['cmsConfig'] });
+            queryClient.invalidateQueries({ queryKey: ['cmsConfigAdmin'] });
+            addNotification('Frontend configuration saved successfully!', 'success');
+        },
+        onError: (err) => {
+            addNotification(err.response?.data?.error || 'Failed to update configuration', 'error');
+        }
+    });
+
+    // Server log file retriever
+    const { data: serverLogs, isLoading: loadingLogs, refetch: refetchLogs } = useQuery({
+        queryKey: ['serverLogs'],
+        queryFn: async () => {
+            const res = await api.get('/users/logs');
+            return res.data.data;
+        },
+        enabled: activeTab === 'logs'
+    });
 
     // Add user form states
     const [newName, setNewName] = useState('');
@@ -188,7 +499,9 @@ const AdminPanel = () => {
     const tabs = [
         { id: 'overview', label: 'Overview', icon: BarChart3 },
         { id: 'users', label: 'User Management', icon: Users },
-        { id: 'analytics', label: 'Analytics', icon: PieChart }
+        { id: 'analytics', label: 'Analytics', icon: PieChart },
+        { id: 'cms', label: 'Frontend Manager', icon: Globe },
+        { id: 'logs', label: 'Server Logs', icon: FileText }
     ];
 
     return (
@@ -567,6 +880,59 @@ const AdminPanel = () => {
                                 <MiniBarChart data={adminStats.monthlyGrowth} color="violet" />
                             ) : (
                                 <div className="h-32 flex items-center justify-center text-xs text-slate-500">Registration data will appear once more users sign up over time</div>
+                            )}
+                        </div>
+                    </div>
+                )}
+
+                {/* ════════════════════════════════════════════════════════ */}
+                {/* TAB: CMS MANAGER                                        */}
+                {/* ════════════════════════════════════════════════════════ */}
+                {activeTab === 'cms' && (
+                    <div className="space-y-6 animate-in fade-in">
+                        {loadingCms ? (
+                            <div className="flex justify-center py-16">
+                                <span className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                            </div>
+                        ) : (
+                            <CmsManager 
+                                initialConfig={cmsConfig} 
+                                onSave={(updated) => cmsMutation.mutate(updated)} 
+                                isSaving={cmsMutation.isPending}
+                            />
+                        )}
+                    </div>
+                )}
+
+                {/* ════════════════════════════════════════════════════════ */}
+                {/* TAB: SERVER LOGS                                        */}
+                {/* ════════════════════════════════════════════════════════ */}
+                {activeTab === 'logs' && (
+                    <div className="space-y-6 animate-in fade-in">
+                        <div className="bg-slate-900/40 backdrop-blur-md border border-slate-800/60 rounded-2xl p-6">
+                            <div className="flex justify-between items-center mb-4">
+                                <div>
+                                    <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                                        <FileText className="w-4 h-4 text-indigo-400" /> Server Logs Viewer
+                                    </h3>
+                                    <p className="text-[10px] text-slate-500 mt-1">Live monitoring logs from combined.log on the server.</p>
+                                </div>
+                                <Button 
+                                    onClick={() => refetchLogs()} 
+                                    className="text-xs py-1.5 px-3 border border-indigo-500/30 hover:bg-indigo-500/10 text-indigo-300 bg-transparent shadow-none"
+                                >
+                                    Refresh Logs
+                                </Button>
+                            </div>
+                            
+                            {loadingLogs ? (
+                                <div className="flex justify-center py-12">
+                                    <span className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                                </div>
+                            ) : (
+                                <pre className="bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-mono text-emerald-400 overflow-auto h-[450px] leading-relaxed whitespace-pre-wrap select-text selection:bg-indigo-500/30 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                                    {serverLogs || 'No logs registered on the server.'}
+                                </pre>
                             )}
                         </div>
                     </div>

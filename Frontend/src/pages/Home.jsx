@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useCMSConfig } from '../services/cms';
 
 const Home = () => {
+    const { data: cms } = useCMSConfig();
+
     // Accordion state for FAQs
     const [faqOpen, setFaqOpen] = useState(null);
 
@@ -9,14 +12,34 @@ const Home = () => {
         setFaqOpen(faqOpen === index ? null : index);
     };
 
-    const stats = [
+    const handleMouseMove = (e) => {
+        const el = e.currentTarget;
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        const degX = (y / (rect.height / 2)) * -12; // tilt angle
+        const degY = (x / (rect.width / 2)) * 12;  // tilt angle
+        el.style.transform = `rotateX(${degX}deg) rotateY(${degY}deg)`;
+        el.style.transition = 'transform 0.1s ease-out';
+    };
+
+    const handleMouseLeave = (e) => {
+        const el = e.currentTarget;
+        el.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        el.style.transition = 'transform 0.5s ease-out';
+    };
+
+    const heroTitle = cms?.heroTitle || 'Engineering Premium Custom Web Applications';
+    const heroDesc = cms?.heroDesc || 'Deep IT Labs builds production-ready software solutions, high-speed dashboards, and custom SaaS platforms designed exactly for your scale.';
+
+    const stats = cms?.stats || [
         { value: '150+', label: 'Projects Completed' },
         { value: '98%', label: 'Client Retention' },
         { value: '15+', label: 'Years Experience' },
         { value: '40+', label: 'Core Developers' }
     ];
 
-    const services = [
+    const services = cms?.services || [
         {
             title: 'MERN Stack Applications',
             desc: 'Custom engineered web applications utilizing React, Node.js, Express, and MongoDB for fast, scalable solutions.',
@@ -63,10 +86,43 @@ const Home = () => {
         { q: 'Can you work with our existing technical team?', a: 'Yes! We commonly co-develop alongside in-house technical teams, offering specialized support in MERN development, cloud setups, or custom migrations.' }
     ];
 
+    const testimonials = [
+        {
+            name: 'Sarah Jenkins',
+            role: 'CTO',
+            company: 'Fintech Flow',
+            avatar: 'SJ',
+            content: 'Deep IT Labs engineered our core transactions dashboard. The MERN stack architecture they delivered is highly secure, fully sanitized, and responsive. Absolutely outstanding architectural standards.',
+            rating: 5,
+            borderColor: 'group-hover:border-violet-500/30',
+            glowColor: 'group-hover:shadow-violet-500/10'
+        },
+        {
+            name: 'David Chen',
+            role: 'Founder',
+            company: 'HealthSync',
+            avatar: 'DC',
+            content: 'The custom CRM platform built by Deep IT Labs has doubled our operations speed. Their Agile sprints and Slack-aligned updates kept us in the loop the entire time. Highly recommended.',
+            rating: 5,
+            borderColor: 'group-hover:border-cyan-500/30',
+            glowColor: 'group-hover:shadow-cyan-500/10'
+        },
+        {
+            name: 'Amara Okafor',
+            role: 'Product Lead',
+            company: 'SaaSify',
+            avatar: 'AO',
+            content: 'Their database and API security setup is bulletproof. The team is collaborative, highly technical, and completely eliminated our technical debt. A top-tier development agency!',
+            rating: 5,
+            borderColor: 'group-hover:border-emerald-500/30',
+            glowColor: 'group-hover:shadow-emerald-500/10'
+        }
+    ];
+
     return (
         <div className="bg-[#06070D] text-white min-h-screen">
-            {/* Hero Section — layered circuit/grid background, no stock photography needed */}
-            <section className="relative overflow-hidden py-28 md:py-36 px-6 md:px-12 text-center">
+            {/* Hero Section — layered circuit/grid background */}
+            <section className="relative overflow-hidden py-28 md:py-36 px-6 md:px-12">
                 {/* Background layer 1: fine grid */}
                 <div
                     className="absolute inset-0 opacity-[0.07]"
@@ -112,27 +168,112 @@ const Home = () => {
                 <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(124,92,252,0.22)_0%,transparent_70%)] blur-2xl" />
                 <div className="absolute top-20 right-0 w-[420px] h-[420px] rounded-full bg-[radial-gradient(circle,rgba(45,212,191,0.16)_0%,transparent_70%)] blur-2xl" />
 
-                <div className="relative max-w-4xl mx-auto flex flex-col gap-6">
-                    <span className="inline-flex items-center gap-2 self-center bg-violet-500/10 text-violet-300 text-xs font-mono font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full border border-violet-500/25">
-                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                        Enterprise Software Engineering
-                    </span>
-                    <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
-                        Engineering Premium <br />
-                        <span className="bg-gradient-to-r from-violet-300 via-violet-400 to-cyan-300 bg-clip-text text-transparent">
-                            Custom Web Applications
+                <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-center lg:text-left">
+                    <div className="lg:col-span-7 flex flex-col gap-6 relative z-20">
+                        <span className="inline-flex items-center gap-2 self-center lg:self-start bg-violet-500/10 text-violet-300 text-xs font-mono font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full border border-violet-500/25">
+                            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+                            Enterprise Software Engineering
                         </span>
-                    </h1>
-                    <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-                        Deep IT Labs builds production-ready software solutions, high-speed dashboards, and custom SaaS platforms designed exactly for your scale.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center mt-4">
-                        <Link to="/contact" className="bg-violet-600 hover:bg-violet-500 text-white font-semibold px-8 py-3.5 rounded-lg shadow-lg shadow-violet-500/25 transition-all text-base">
-                            Start Your Project
-                        </Link>
-                        <Link to="/portfolio" className="bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white font-semibold px-8 py-3.5 rounded-lg transition-all text-base backdrop-blur-sm">
-                            View Case Studies
-                        </Link>
+                        <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
+                            {heroTitle}
+                        </h1>
+                        <p className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                            {heroDesc}
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mt-4">
+                            <Link to="/contact" className="bg-violet-600 hover:bg-violet-500 text-white font-semibold px-8 py-3.5 rounded-lg shadow-lg shadow-violet-500/25 transition-all text-base text-center">
+                                Start Your Project
+                            </Link>
+                            <Link to="/portfolio" className="bg-white/5 hover:bg-white/10 border border-white/10 text-gray-300 hover:text-white font-semibold px-8 py-3.5 rounded-lg transition-all text-base backdrop-blur-sm text-center">
+                                View Case Studies
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* 3D Interactive Right Column */}
+                    <div className="lg:col-span-5 flex justify-center items-center relative z-20">
+                        {/* 3D Wrapper */}
+                        <div className="relative w-full max-w-[400px] h-[380px]" style={{ perspective: '1200px' }}>
+                            {/* Card Body */}
+                            <div 
+                                onMouseMove={handleMouseMove}
+                                onMouseLeave={handleMouseLeave}
+                                className="relative w-full h-full rounded-2xl bg-gradient-to-br from-violet-600/10 via-slate-950/90 to-cyan-500/10 border border-white/10 p-6 flex flex-col justify-between shadow-2xl backdrop-blur-md select-none"
+                                style={{ 
+                                    transformStyle: 'preserve-3d',
+                                    transition: 'transform 0.5s ease-out'
+                                }}
+                            >
+                                {/* Glow behind card */}
+                                <div className="absolute inset-0 rounded-2xl bg-indigo-500/5 blur-xl pointer-events-none" style={{ transform: 'translateZ(-20px)' }} />
+                                
+                                {/* Header / Logo Layer */}
+                                <div className="flex justify-between items-center" style={{ transform: 'translateZ(40px)' }}>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-3 h-3 rounded-full bg-red-500/70" />
+                                        <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
+                                        <div className="w-3 h-3 rounded-full bg-green-500/70" />
+                                    </div>
+                                    <span className="text-[10px] font-mono text-slate-500 tracking-wider">deepitlabs.in</span>
+                                </div>
+                                
+                                {/* Server Activity Layer */}
+                                <div 
+                                    className="my-4 bg-slate-900/60 border border-white/5 rounded-xl p-4 flex flex-col gap-3 justify-center h-[180px]"
+                                    style={{ transform: 'translateZ(30px)' }}
+                                >
+                                    <div className="flex justify-between items-center text-xs">
+                                        <span className="text-slate-400 font-mono">Server Load</span>
+                                        <span className="text-emerald-400 font-bold font-mono">99.9% Uptime</span>
+                                    </div>
+                                    
+                                    {/* Simulated charts */}
+                                    <div className="flex items-end gap-1.5 h-16 pt-2">
+                                        <div className="w-full bg-violet-500/20 rounded-t h-[40%] animate-pulse" />
+                                        <div className="w-full bg-violet-500/40 rounded-t h-[60%]" />
+                                        <div className="w-full bg-violet-500/30 rounded-t h-[50%]" />
+                                        <div className="w-full bg-cyan-500/40 rounded-t h-[75%] animate-pulse" />
+                                        <div className="w-full bg-cyan-500/60 rounded-t h-[90%]" />
+                                        <div className="w-full bg-emerald-500/50 rounded-t h-[80%]" />
+                                        <div className="w-full bg-indigo-500/40 rounded-t h-[65%]" />
+                                    </div>
+                                    
+                                    <div className="flex justify-between items-center text-[10px] text-slate-500 border-t border-white/5 pt-2">
+                                        <span>US-EAST-1</span>
+                                        <span>Response: 14ms</span>
+                                    </div>
+                                </div>
+                                
+                                {/* Bottom Info Layer */}
+                                <div className="flex justify-between items-center" style={{ transform: 'translateZ(20px)' }}>
+                                    <div className="flex flex-col">
+                                        <span className="text-[9px] font-mono text-slate-500 uppercase tracking-widest">Active Requests</span>
+                                        <span className="text-base font-bold text-white tracking-wide">4,812 / sec</span>
+                                    </div>
+                                    <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center border border-cyan-500/30 animate-pulse">
+                                        <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
+                                    </div>
+                                </div>
+                                
+                                {/* 3D Floating Pill 1 */}
+                                <div 
+                                    className="absolute -top-6 -left-8 bg-slate-950/95 border border-violet-500/30 text-violet-300 text-xs font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-2xl"
+                                    style={{ transform: 'translateZ(60px)' }}
+                                >
+                                    <span className="text-lg">🛡️</span>
+                                    <span>Secure Vault</span>
+                                </div>
+                                
+                                {/* 3D Floating Pill 2 */}
+                                <div 
+                                    className="absolute -bottom-6 -right-8 bg-slate-950/95 border border-cyan-500/30 text-cyan-300 text-xs font-semibold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-2xl"
+                                    style={{ transform: 'translateZ(80px)' }}
+                                >
+                                    <span className="text-lg">⚡</span>
+                                    <span>High Speed</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -162,12 +303,18 @@ const Home = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {services.map((service, index) => (
-                        <div key={index} className="group bg-white/[0.03] border border-white/5 p-8 rounded-xl hover:border-violet-500/40 hover:bg-white/[0.05] transition-all duration-300">
-                            <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-gradient-to-br from-violet-500/15 to-cyan-500/10 text-2xl mb-5 group-hover:from-violet-500/25 group-hover:to-cyan-500/20 transition-all">
+                        <div 
+                            key={index} 
+                            onMouseMove={handleMouseMove}
+                            onMouseLeave={handleMouseLeave}
+                            className="group bg-white/[0.03] border border-white/5 p-8 rounded-xl hover:border-violet-500/40 hover:bg-white/[0.05] transition-all duration-300 cursor-default"
+                            style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
+                        >
+                            <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-gradient-to-br from-violet-500/15 to-cyan-500/10 text-2xl mb-5 group-hover:from-violet-500/25 group-hover:to-cyan-500/20 transition-all" style={{ transform: 'translateZ(20px)' }}>
                                 {service.icon}
                             </div>
-                            <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
-                            <p className="text-gray-400 text-sm leading-relaxed">{service.desc}</p>
+                            <h3 className="text-xl font-bold text-white mb-3" style={{ transform: 'translateZ(15px)' }}>{service.title}</h3>
+                            <p className="text-gray-400 text-sm leading-relaxed" style={{ transform: 'translateZ(10px)' }}>{service.desc}</p>
                         </div>
                     ))}
                 </div>
@@ -196,8 +343,59 @@ const Home = () => {
                 </div>
             </section>
 
+            {/* Reviews / Testimonials Section */}
+            <section className="py-24 px-6 md:px-12 max-w-7xl mx-auto border-t border-white/5">
+                <div className="text-center mb-16 flex flex-col gap-3">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-cyan-400/80">Testimonials</span>
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight">What Our Clients Say</h2>
+                    <p className="text-gray-400 max-w-xl mx-auto text-sm md:text-base">
+                        Hear from the founders, CTOs, and product leaders who build their premium software ecosystems with Deep IT Labs.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {testimonials.map((t, index) => (
+                        <div 
+                            key={index} 
+                            onMouseMove={handleMouseMove}
+                            onMouseLeave={handleMouseLeave}
+                            className={`group bg-white/[0.02] border border-white/5 p-8 rounded-2xl flex flex-col justify-between hover:bg-white/[0.04] transition-all duration-300 backdrop-blur-sm cursor-default ${t.borderColor} ${t.glowColor}`}
+                            style={{ transformStyle: 'preserve-3d', perspective: '1000px' }}
+                        >
+                            <div className="flex flex-col gap-4">
+                                {/* Stars */}
+                                <div className="flex gap-1" style={{ transform: 'translateZ(15px)' }}>
+                                    {[...Array(t.rating)].map((_, i) => (
+                                        <span key={i} className="text-yellow-500 text-sm">★</span>
+                                    ))}
+                                </div>
+                                
+                                {/* Content */}
+                                <p 
+                                    className="text-slate-400 text-sm leading-relaxed"
+                                    style={{ transform: 'translateZ(10px)' }}
+                                >
+                                    "{t.content}"
+                                </p>
+                            </div>
+
+                            {/* Reviewer Meta */}
+                            <div className="flex items-center gap-4 mt-6 border-t border-white/5 pt-4" style={{ transform: 'translateZ(20px)' }}>
+                                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center font-bold text-sm text-slate-300 select-none">
+                                    {t.avatar}
+                                </div>
+                                <div className="flex flex-col">
+                                    <span className="text-sm font-semibold text-white">{t.name}</span>
+                                    <span className="text-[10px] text-slate-500">{t.role}, {t.company}</span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
             {/* FAQs */}
-            <section className="py-24 px-6 md:px-12 max-w-3xl mx-auto">
+            <section className="py-24 px-6 md:px-12 max-w-3xl mx-auto border-t border-white/5">
                 <div className="text-center mb-16 flex flex-col gap-3">
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Frequently Asked Questions</h2>
                     <p className="text-gray-400 text-sm md:text-base">

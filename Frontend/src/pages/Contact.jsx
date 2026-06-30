@@ -1,12 +1,18 @@
 import React from 'react';
 import ContactForm from '../components/forms/ContactForm';
 import { Helmet } from 'react-helmet-async';
+import { useCMSConfig } from '../services/cms';
 
 /**
  * Public Contact Page.
  * Displays company coordinates and renders our validated ContactForm.
  */
 const Contact = () => {
+    const { data: cms } = useCMSConfig();
+    const email = cms?.contactEmail || 'info@deepitlabs.in';
+    const phone = cms?.contactPhone || '+91 7058222107';
+    const headquarters = cms?.headquarters || 'Nashik, Maharashtra, India';
+
     return (
         <div className="bg-slate-950 text-white min-h-screen py-16 px-6 md:px-12">
             <Helmet>
@@ -31,21 +37,21 @@ const Contact = () => {
                             <span className="text-2xl" aria-hidden="true">📧</span>
                             <div>
                                 <p className="font-semibold text-white">General Inquiry</p>
-                                <p>info@deepitlabs.com</p>
+                                <p>{email}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-4">
                             <span className="text-2xl" aria-hidden="true">📞</span>
                             <div>
                                 <p className="font-semibold text-white">Direct Line</p>
-                                <p>+1 (555) 019-2834</p>
+                                <p>{phone}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-4">
                             <span className="text-2xl" aria-hidden="true">🏢</span>
                             <div>
                                 <p className="font-semibold text-white">Headquarters</p>
-                                <p>Silicon Valley Plaza, San Jose, CA</p>
+                                <p>{headquarters}</p>
                             </div>
                         </div>
                     </div>

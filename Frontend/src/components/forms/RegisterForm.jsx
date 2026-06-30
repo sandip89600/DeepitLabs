@@ -41,7 +41,11 @@ const RegisterForm = () => {
 
         if (res.success) {
             addNotification('Registration successful! Welcome to the portal.', 'success');
-            navigate('/dashboard');
+            if (res.role === 'admin' || res.role === 'mentor') {
+                navigate('/admin-panel');
+            } else {
+                navigate('/dashboard');
+            }
         } else {
             addNotification(res.error || 'Failed to create account', 'error');
         }

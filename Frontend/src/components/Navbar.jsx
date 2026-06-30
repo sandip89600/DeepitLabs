@@ -1,10 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { useCMSConfig } from '../services/cms';
 
 // Navigation bar integrating public marketing pages with secure portal session controllers
 const Navbar = () => {
     const { user, logout } = useContext(AuthContext);
+    const { data: cms } = useCMSConfig();
+    const brandName = cms?.brandName || 'Deep IT Labs';
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -31,7 +34,7 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto flex justify-between items-center">
                 {/* Brand Logo */}
                 <Link to="/" className="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-indigo-400 bg-clip-text text-transparent">
-                    Deep IT Labs
+                    {brandName}
                 </Link>
 
                 {/* Desktop Links (Marketing + Portal Controls) */}
@@ -53,13 +56,6 @@ const Navbar = () => {
                             )}
 
                             <NavLink to="/settings" className={activeStyle}>Settings</NavLink>
-
-                            <button 
-                                onClick={handleLogout} 
-                                className="bg-slate-900 border border-slate-800 hover:bg-slate-800 text-gray-300 text-xs font-semibold px-4 py-2 rounded-lg transition-all cursor-pointer"
-                            >
-                                Log out
-                            </button>
                         </>
                     ) : (
                         <>
@@ -142,12 +138,6 @@ const Navbar = () => {
                             >
                                 Settings
                             </NavLink>
-                            <button 
-                                onClick={() => { handleLogout(); setIsOpen(false); }} 
-                                className="bg-slate-900 border border-slate-800 text-gray-300 font-semibold py-3 rounded-lg mt-2 cursor-pointer text-center"
-                            >
-                                Log out
-                            </button>
                         </>
                     ) : (
                         <>

@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
             setUser(profileRes.data.data);
             setToken(userToken);
             
-            return { success: true };
+            return { success: true, role: profileRes.data.data.role };
         } catch (err) {
             return {
                 success: false,
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
             setUser(profileRes.data.data);
             setToken(userToken);
             
-            return { success: true };
+            return { success: true, role: profileRes.data.data.role };
         } catch (err) {
             return {
                 success: false,
