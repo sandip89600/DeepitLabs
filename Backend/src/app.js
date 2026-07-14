@@ -33,10 +33,11 @@ app.use(compression());
 // Set security headers using Helmet
 app.use(helmet());
 
-// Enable Cross-Origin Resource Sharing (CORS) with explicit origin configuration
 const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:5174',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:5174',
     'https://www.deepitlabs.in'
 ];
 

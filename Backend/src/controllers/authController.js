@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const mongoose = require('mongoose');
 const asyncHandler = require('../utils/asyncHandler');
 const ErrorResponse = require('../utils/errorResponse');
 const { setTokenDeny, isTokenDeny } = require('../config/redis');
@@ -38,6 +39,10 @@ const sendTokenResponse = async (user, statusCode, res) => {
 // @route   POST /api/v1/auth/register
 // @access  Public
 const register = asyncHandler(async (req, res, next) => {
+    if (process.env.NODE_ENV !== 'test' && mongoose.connection.readyState !== 1) {
+        return next(new ErrorResponse('Database connection is offline. Please ensure your current IP address is whitelisted in MongoDB Atlas, or configure a local MongoDB instance in your backend .env file.', 503));
+    }
+
     const { name, email, password, role, age } = req.body;
 
     const user = await User.create({
@@ -95,6 +100,10 @@ const login = asyncHandler(async (req, res, next) => {
                 return await sendTokenResponse(user, 200, res);
             }
         }
+    }
+
+    if (process.env.NODE_ENV !== 'test' && mongoose.connection.readyState !== 1) {
+        return next(new ErrorResponse('Database connection is offline. Please ensure your current IP address is whitelisted in MongoDB Atlas, or configure a local MongoDB instance in your backend .env file.', 503));
     }
 
     // Check for user (explicitly select password because it is set to select: false in schema)
