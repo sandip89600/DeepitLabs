@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import SEO from "../seo/SEO";
 import { useCMSConfig } from "../services/cms";
 
 const Portfolio = () => {
@@ -62,6 +64,12 @@ const Portfolio = () => {
 
   return (
     <section className="bg-slate-950 text-white py-20 px-6">
+      <SEO
+        title="Software Engineering Portfolio | Deep IT Labs India"
+        description="View completed web applications, SaaS dashboards, and ERP/CRM projects built by Deep IT Labs, a premier React Development Company and IT Company in Nashik."
+        keywords="MERN Stack Development, React Development Company, Node.js Development Company, ERP Development Company, CRM Development Company, SaaS Development Company, Custom Software Development, Software Company in Nashik, Web Development Company Nashik, IT Company Nashik"
+        url="https://www.deepitlabs.in/portfolio"
+      />
       <div className="max-w-7xl mx-auto">
         {/* Heading */}
 
@@ -126,9 +134,9 @@ const Portfolio = () => {
                 </span>
 
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 flex items-center justify-center bg-black/50">
-                  <button className="bg-white text-black px-6 py-3 rounded-xl font-semibold hover:scale-105 transition">
+                  <Link to="/case-studies" className="bg-white text-black px-6 py-3 rounded-xl font-semibold hover:scale-105 transition">
                     View Case Study →
-                  </button>
+                  </Link>
                 </div>
               </div>
 
@@ -174,9 +182,9 @@ const Portfolio = () => {
 
                 {/* Button */}
 
-                <button className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 py-4 rounded-xl font-semibold transition-all duration-300">
-                  Explore Project →
-                </button>
+                <Link to="/case-studies" className="w-full block text-center bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 py-4 rounded-xl font-semibold transition-all duration-300">
+                  Explore Case Study →
+                </Link>
               </div>
             </div>
           ))}

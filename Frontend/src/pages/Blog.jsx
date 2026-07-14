@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import SEO from '../seo/SEO';
 
 const Blog = () => {
     const [search, setSearch] = useState('');
@@ -41,6 +42,12 @@ const Blog = () => {
 
     return (
         <div className="bg-slate-950 text-white min-h-screen py-16 px-6 md:px-12">
+            <SEO
+                title="Tech Insights & Engineering Journal | Deep IT Labs"
+                description="Technical tutorials, software guides, and lessons written by senior developers. Learn about MERN Stack Development, React, Node.js optimization, and modern web application security."
+                keywords="Deep IT Labs, DeepITLabs, MERN Stack Development, React Development Company, Node.js Development Company, Custom Software Development, Software Company in Nashik"
+                url="https://www.deepitlabs.in/blog"
+            />
             <div className="max-w-7xl mx-auto">
                 
                 {/* Header */}

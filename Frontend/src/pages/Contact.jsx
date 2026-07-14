@@ -1,6 +1,6 @@
 import React from 'react';
 import ContactForm from '../components/forms/ContactForm';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../seo/SEO';
 import { useCMSConfig } from '../services/cms';
 
 /**
@@ -15,10 +15,12 @@ const Contact = () => {
 
     return (
         <div className="bg-slate-950 text-white min-h-screen py-16 px-6 md:px-12">
-            <Helmet>
-                <title>Contact Our Engineers | Deep IT Labs</title>
-                <meta name="description" content="Reach out to the Deep IT Labs development team to consult on custom SaaS, ERP/CRM development, or API engineering." />
-            </Helmet>
+            <SEO
+                title="Contact Us | Deep IT Labs India - Software Company in Nashik"
+                description="Reach out to the Deep IT Labs software development team. Consult on custom SaaS, ERP/CRM, MERN stack, or AI development. We are a leading IT Company in Nashik."
+                keywords="Deep IT Labs, DeepITLabs, Deep IT Labs Nashik, Deep IT Labs India, Software Company in Nashik, Web Development Company Nashik, IT Company Nashik, MERN Developer Nashik, Custom Software Development"
+                url="https://www.deepitlabs.in/contact"
+            />
             
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
                 

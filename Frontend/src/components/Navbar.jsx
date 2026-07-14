@@ -16,7 +16,9 @@ const Navbar = () => {
         { name: 'About', path: '/about' },
         { name: 'Services', path: '/services' },
         { name: 'Portfolio', path: '/portfolio' },
-        { name: 'Blog', path: '/blog' }
+        { name: 'Case Studies', path: '/case-studies' },
+        { name: 'Blog', path: '/blog' },
+        { name: 'FAQ', path: '/faq' }
     ];
 
     const handleLogout = () => {

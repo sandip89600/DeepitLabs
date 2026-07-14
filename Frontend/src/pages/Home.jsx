@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import SEO from '../seo/SEO';
 import { useCMSConfig } from '../services/cms';
 
 const Home = () => {
@@ -124,6 +125,13 @@ const Home = () => {
 
     return (
         <div className="bg-[#06070D] text-white min-h-screen">
+            <SEO
+                title="Deep IT Labs | MERN Stack, AI & SaaS Development Company"
+                description="Deep IT Labs is an enterprise software development company specializing in MERN Stack Development, SaaS platforms, ERP, CRM, and AI Solutions. Partner with a premier Custom Software Development company."
+                keywords="Deep IT Labs, DeepITLabs, Deep IT Labs Nashik, Deep IT Labs India, MERN Stack Development, React Development Company, Node.js Development Company, ERP Development Company, CRM Development Company, AI Development Company, SaaS Development Company, Custom Software Development, Software Company in Nashik, Web Development Company Nashik, IT Company Nashik, MERN Developer Nashik, AI Search Optimization"
+                url="https://www.deepitlabs.in"
+                image="https://www.deepitlabs.in/og-image.png"
+            />
             {/* Hero Section — layered circuit/grid background */}
             <section className="relative overflow-hidden py-28 md:py-36 px-6 md:px-12">
                 {/* Background layer 1: fine grid */}

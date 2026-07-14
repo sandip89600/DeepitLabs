@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../seo/SEO';
 import { useCMSConfig } from '../services/cms';
 
 // Premium About Page with geometric grid background, glowing radial spots, and 3D tilting glassmorphic cards
@@ -64,10 +64,12 @@ const About = () => {
 
     return (
         <div className="relative bg-[#06070D] text-white min-h-screen py-20 px-6 md:px-12 overflow-hidden">
-            <Helmet>
-                <title>About Us | Deep IT Labs</title>
-                <meta name="description" content="Learn more about the software architects behind Deep IT Labs, our mission, core values, and vision." />
-            </Helmet>
+            <SEO
+                title="About Deep IT Labs | Software Company in Nashik"
+                description="Learn more about the software architects behind Deep IT Labs, a premier Software Company in Nashik, India specializing in MERN Stack, custom SaaS, and AI Development."
+                keywords="Deep IT Labs, DeepITLabs, Deep IT Labs Nashik, Deep IT Labs India, Software Company in Nashik, IT Company Nashik, MERN Developer Nashik, Custom Software Development"
+                url="https://www.deepitlabs.in/about"
+            />
 
             {/* Background layer 1: grid overlay */}
             <div 

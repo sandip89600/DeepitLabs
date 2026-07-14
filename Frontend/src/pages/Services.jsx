@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../seo/SEO';
 import {
     Code,
     Layers,
@@ -81,10 +81,12 @@ const Services = () => {
 
     return (
         <div className="bg-[#030408] text-white min-h-screen relative py-16 overflow-hidden">
-            <Helmet>
-                <title>Core Competencies & Services | Deep IT Labs</title>
-                <meta name="description" content="Custom software development, MERN stack web applications, API engineering, and cloud deployments." />
-            </Helmet>
+            <SEO
+                title="MERN Stack, AI & SaaS Development Services | Deep IT Labs India"
+                description="Deep IT Labs is an AI Development Company and SaaS Development Company. We offer MERN Stack Development, custom ERP/CRM platforms, and premium custom software development services."
+                keywords="MERN Stack Development, React Development Company, Node.js Development Company, ERP Development Company, CRM Development Company, AI Development Company, SaaS Development Company, Custom Software Development, Deep IT Labs, DeepITLabs, Deep IT Labs Nashik, Deep IT Labs India"
+                url="https://www.deepitlabs.in/services"
+            />
 
             {/* Subtle background glow highlights */}
             <div className="absolute top-0 right-1/4 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.03)_0%,transparent_70%)] blur-3xl pointer-events-none" />

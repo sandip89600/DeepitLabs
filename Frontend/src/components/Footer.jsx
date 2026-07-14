@@ -40,8 +40,10 @@ const Footer = () => {
                 <div className="flex flex-col gap-3">
                     <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-2">Useful Links</h4>
                     <Link to="/about" className="text-sm hover:text-white transition-all">About Us</Link>
-                    <Link to="/portfolio" className="text-sm hover:text-white transition-all">Case Studies & Portfolio</Link>
+                    <Link to="/portfolio" className="text-sm hover:text-white transition-all">Our Portfolio</Link>
+                    <Link to="/case-studies" className="text-sm hover:text-white transition-all">Technical Case Studies</Link>
                     <Link to="/blog" className="text-sm hover:text-white transition-all">Latest Tech Blog</Link>
+                    <Link to="/faq" className="text-sm hover:text-white transition-all">FAQ</Link>
                     <Link to="/privacy" className="text-sm hover:text-white transition-all">Privacy Policy</Link>
                     <Link to="/terms" className="text-sm hover:text-white transition-all">Terms & Conditions</Link>
                 </div>
