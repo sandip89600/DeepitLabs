@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import SEO from '../seo/SEO';
 
 const Blog = () => {
@@ -6,16 +7,68 @@ const Blog = () => {
 
     const posts = [
         {
+            title: 'MERN Stack Development Cost in India: A Full Guide',
+            slug: 'mern-stack-development-cost-india',
+            desc: 'Understand the budgeting, developer hourly rates, database design costs, and infrastructure setup parameters for deploying MERN stack apps in India in 2026.',
+            author: 'Deep IT Consulting',
+            date: 'July 14, 2026',
+            readTime: '7 min read',
+            tag: 'MERN Stack',
+            icon: '💰'
+        },
+        {
+            title: 'ERP vs CRM: Key Differences for Modern Business Scaling',
+            slug: 'erp-vs-crm',
+            desc: 'A structural comparison between Enterprise Resource Planning (ERP) and Customer Relationship Management (CRM) tools. Learn which one to build first to maximize operations.',
+            author: 'Deep IT Enterprise Lead',
+            date: 'July 10, 2026',
+            readTime: '5 min read',
+            tag: 'ERP & CRM',
+            icon: '🏢'
+        },
+        {
+            title: 'Why Modern Businesses Need Custom SaaS Products',
+            slug: 'saas-development-guide',
+            desc: 'Generic tools have limitations. Explore how a tailored SaaS ecosystem drives operational leverage, custom subscription monetization, and deep platform analytics.',
+            author: 'Senior Software Architect',
+            date: 'July 05, 2026',
+            readTime: '6 min read',
+            tag: 'SaaS',
+            icon: '⚡'
+        },
+        {
+            title: 'React vs Next.js: Architectural Insights for Engineering Leads',
+            slug: 'react-vs-nextjs',
+            desc: 'An in-depth technical analysis comparing Single Page React Apps with server-side rendered Next.js frameworks, examining caching, SEO crawler optimization, and load speed metrics.',
+            author: 'React Lead Architect',
+            date: 'June 30, 2026',
+            readTime: '9 min read',
+            tag: 'Frontend',
+            icon: '⚛️'
+        },
+        {
+            title: 'AI Automation for Businesses: Streamlining Workflows in 2026',
+            slug: 'ai-automation-for-business',
+            desc: 'Discover how integrating custom LLM agents and semantic databases directly into internal CRM platforms automates 60% of manual scheduling and document sorting tasks.',
+            author: 'AI Automation Team',
+            date: 'June 25, 2026',
+            readTime: '8 min read',
+            tag: 'AI Solutions',
+            icon: '🤖'
+        },
+        {
             title: 'Express 5 vs Express 4: Resolving Read-only Query Getters',
+            slug: '',
             desc: 'A comprehensive guide on managing query objects in Express 5, detailing why traditional middlewares throw property errors and how to safely run in-place sanitizations.',
             author: 'Deep IT Tech Lead',
-            date: 'June 28, 2026',
+            date: 'June 22, 2026',
             readTime: '6 min read',
             tag: 'Node.js',
             icon: '⚙️'
         },
         {
             title: 'NoSQL query injections: Defense Strategies in MongoDB & Mongoose',
+            slug: '',
             desc: 'Explore how hackers target Mongoose collections using query operators, and how to write custom recursive filters to protect your databases.',
             author: 'Deep IT Security Team',
             date: 'June 20, 2026',
@@ -25,6 +78,7 @@ const Blog = () => {
         },
         {
             title: 'Scaling Upload pipelines using Memory Buffers and Cloudinary Streams',
+            slug: '',
             desc: 'Avoid writing heavy files on local disks. Learn how to parse multipart payloads in memory using Multer and stream them directly to Cloudinary.',
             author: 'Senior Systems Engineer',
             date: 'May 15, 2026',
@@ -84,8 +138,14 @@ const Blog = () => {
                                         </span>
                                         <span className="text-xs text-gray-500">{post.readTime}</span>
                                     </div>
-                                    <h3 className="text-lg font-bold text-white mb-3 hover:text-indigo-400 transition-colors cursor-pointer">
-                                        {post.title}
+                                    <h3 className="text-lg font-bold text-white mb-3 hover:text-indigo-400 transition-colors">
+                                        {post.slug ? (
+                                            <Link to={`/blog/${post.slug}`} className="hover:underline">
+                                                {post.title}
+                                            </Link>
+                                        ) : (
+                                            post.title
+                                        )}
                                     </h3>
                                     <p className="text-gray-400 text-xs leading-relaxed mb-6">
                                         {post.desc}

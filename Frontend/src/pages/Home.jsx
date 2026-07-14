@@ -131,7 +131,26 @@ const Home = () => {
                 keywords="Deep IT Labs, DeepITLabs, Deep IT Labs Nashik, Deep IT Labs India, MERN Stack Development, React Development Company, Node.js Development Company, ERP Development Company, CRM Development Company, AI Development Company, SaaS Development Company, Custom Software Development, Software Company in Nashik, Web Development Company Nashik, IT Company Nashik, MERN Developer Nashik, AI Search Optimization"
                 url="https://www.deepitlabs.in"
                 image="https://www.deepitlabs.in/og-image.png"
-            />
+            >
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Organization",
+                        "name": "Deep IT Labs",
+                        "url": "https://www.deepitlabs.in",
+                        "logo": "https://www.deepitlabs.in/logo.png",
+                        "description": "Deep IT Labs is a software development company specializing in MERN Stack, SaaS, ERP, CRM, AI Solutions and Enterprise Software Development.",
+                        "email": "info@deepitlabs.in",
+                        "telephone": "+91 7058222107",
+                        "address": {
+                            "@type": "PostalAddress",
+                            "addressLocality": "Nashik",
+                            "addressRegion": "Maharashtra",
+                            "addressCountry": "IN"
+                        }
+                    })}
+                </script>
+            </SEO>
             {/* Hero Section — layered circuit/grid background */}
             <section className="relative overflow-hidden py-28 md:py-36 px-6 md:px-12">
                 {/* Background layer 1: fine grid */}

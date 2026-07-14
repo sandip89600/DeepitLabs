@@ -26,26 +26,24 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Column 2: Our Services */}
                 <div className="flex flex-col gap-3">
                     <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-2">Our Services</h4>
-                    <Link to="/services" className="text-sm hover:text-white transition-all">Website Development</Link>
-                    <Link to="/services" className="text-sm hover:text-white transition-all">MERN Stack Solutions</Link>
-                    <Link to="/services" className="text-sm hover:text-white transition-all">Custom ERP/CRM systems</Link>
-                    <Link to="/services" className="text-sm hover:text-white transition-all">Mobile App Engineering</Link>
-                    <Link to="/services" className="text-sm hover:text-white transition-all">UI/UX Design Studio</Link>
+                    <Link to="/services/mern-development" className="text-sm hover:text-white transition-all">MERN Stack Development</Link>
+                    <Link to="/services/web-development" className="text-sm hover:text-white transition-all">React & Web Consulting</Link>
+                    <Link to="/services/erp-development" className="text-sm hover:text-white transition-all">Custom ERP Software</Link>
+                    <Link to="/services/crm-development" className="text-sm hover:text-white transition-all">Bespoke CRM Software</Link>
+                    <Link to="/services/ai-development" className="text-sm hover:text-white transition-all">AI & SaaS Development</Link>
                 </div>
 
                 {/* Column 3: Useful Links */}
                 <div className="flex flex-col gap-3">
                     <h4 className="text-white font-bold text-sm tracking-wider uppercase mb-2">Useful Links</h4>
                     <Link to="/about" className="text-sm hover:text-white transition-all">About Us</Link>
-                    <Link to="/portfolio" className="text-sm hover:text-white transition-all">Our Portfolio</Link>
+                    <Link to="/industries" className="text-sm hover:text-white transition-all">Industries We Serve</Link>
                     <Link to="/case-studies" className="text-sm hover:text-white transition-all">Technical Case Studies</Link>
                     <Link to="/blog" className="text-sm hover:text-white transition-all">Latest Tech Blog</Link>
                     <Link to="/faq" className="text-sm hover:text-white transition-all">FAQ</Link>
                     <Link to="/privacy" className="text-sm hover:text-white transition-all">Privacy Policy</Link>
-                    <Link to="/terms" className="text-sm hover:text-white transition-all">Terms & Conditions</Link>
                 </div>
 
                 {/* Column 4: Newsletter */}

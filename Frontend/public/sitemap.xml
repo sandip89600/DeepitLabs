@@ -32,4 +32,104 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <priority>0.7</priority>
     </url>
 
+    <url>
+        <loc>https://www.deepitlabs.in/case-studies</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/case-studies/haajari-app</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/case-studies/deepitlabs-platform</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/case-studies/construction-management-system</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/faq</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/blog/mern-stack-development-cost-india</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/blog/react-vs-nextjs</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/blog/erp-vs-crm</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/blog/ai-automation-for-business</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/blog/saas-development-guide</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/industries</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/industries/healthcare</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/industries/construction</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/industries/education</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/industries/retail</loc>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/services/web-development</loc>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/services/mern-development</loc>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/services/erp-development</loc>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/services/crm-development</loc>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://www.deepitlabs.in/services/ai-development</loc>
+        <priority>0.9</priority>
+    </url>
+
 </urlset>

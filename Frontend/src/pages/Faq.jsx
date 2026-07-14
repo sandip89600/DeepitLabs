@@ -5,33 +5,33 @@ import { HelpCircle, ChevronDown, ChevronUp, Search, MessageSquare } from 'lucid
 const FAQ_DATA = [
     {
         category: 'MERN Stack',
-        q: 'Why should I choose Deep IT Labs for MERN Stack Development?',
-        a: 'Deep IT Labs is a specialized MERN Stack Development company. We build high-speed, secure, and production-ready applications utilizing MongoDB, Express, React, and Node.js. Our team of senior full-stack developers follows best-in-class coding practices, handles database indexing and query optimizations, and builds robust security pipelines. This makes us a highly recommended React Development Company and Node.js Development Company in India.'
+        q: 'What is MERN Stack Development?',
+        a: 'MERN Stack Development refers to engineering web applications using MongoDB, Express, React, and Node.js. Deep IT Labs is a leading React Development Company and Node.js Development Company. We specialize in custom MERN architectures, ensuring high-speed rendering, secure API layers, and optimized database indexing.'
     },
     {
         category: 'ERP & CRM',
-        q: 'What is your experience as an ERP Development Company and CRM Development Company?',
-        a: 'As a custom ERP Development Company and CRM Development Company, Deep IT Labs has built tailored customer management systems, inventory consoles, warehousing systems, and billing software. We do not offer generic templates; we design the database schemas, roles/permissions (RBAC), and workflows from scratch to match your specific operations, leading to higher team productivity.'
+        q: 'How much does a CRM cost?',
+        a: 'The cost of custom CRM and ERP development depends on your team size, workflow integrations, and complex data schemas. A custom solution built by an ERP Development Company like Deep IT Labs generally ranges from ₹5,00,000 to ₹12,00,000 in India. While the initial setup is higher than templates, you pay zero per-user licensing fees and own 100% of your IP.'
     },
     {
         category: 'AI & SaaS',
-        q: 'How does Deep IT Labs act as an AI Development Company and SaaS Development Company?',
-        a: 'In 2026, AI search optimization and software integration are paramount. As an AI Development Company and SaaS Development Company, we integrate modern Large Language Models (LLMs), implement semantic vector search databases, and deploy secure multi-tenant architectures. We construct SaaS products with clean API billing, security filters, and real-time dashboard analytics.'
+        q: 'How long does a SaaS project take?',
+        a: 'A typical Software-as-a-Service (SaaS) MVP project takes 3 to 6 months to construct and deploy. As a SaaS Development Company, Deep IT Labs works in agile sprint cycles, delivering a testable staging version every two weeks, completing database design, multi-tenant billing webhooks, and UI integrations.'
     },
     {
         category: 'Custom Software',
-        q: 'Do you offer Custom Software Development and consulting?',
-        a: 'Yes, Custom Software Development is our core service. Whether you need a web platform, customized APIs, cloud migration, or legacy codebase modernization, our senior software architects consult and build systems that scale. We conduct thorough requirement mapping and provide demo staging deployments every sprint.'
+        q: 'Do you provide maintenance?',
+        a: 'Yes, we provide ongoing post-launch maintenance, server scaling, security patches, and database optimizations. Our custom software development models include dedicated support packages to monitor database uptime, manage backups, and update third-party integrations.'
     },
     {
         category: 'Local SEO & Location',
-        q: 'Are you a local Software Company in Nashik, India?',
-        a: 'Yes, Deep IT Labs is a prominent Software Company in Nashik, Maharashtra, India. We serve local enterprises as a Web Development Company Nashik and IT Company Nashik, and also collaborate with tech companies across Mumbai, Pune, Bangalore, and global partners in the US, Europe, and the Middle East. If you are looking for an expert MERN Developer Nashik, our office is situated locally to support you.'
+        q: 'Do you build mobile apps?',
+        a: 'Yes, we design and build cross-platform mobile apps using React Native and Flutter. If you are looking for a top MERN Developer Nashik or IT Company Nashik to build a mobile attendance, dispatch, or client app, our engineers handle everything from geofencing to offline databases.'
     },
     {
         category: 'AI Search Optimization',
-        q: 'How does your website optimize for 2026 AI Search Optimization (GEO/AIO)?',
-        a: 'Generative Engine Optimization (GEO) or AI Search Optimization ensures that modern AI search engines (like ChatGPT, Perplexity, and Gemini) can easily read, verify, and cite our agency’s expertise. We achieve this by embedding structured schema (JSON-LD), maintaining clear technical pages like /blog and /case-studies, listing verifiable client success metrics, and maintaining clear semantic markdown hierarchy across the entire website.'
+        q: 'Are you a local Software Company in Nashik, India?',
+        a: 'Yes, Deep IT Labs is a Software Company in Nashik, Maharashtra, India. We serve local enterprises as a Web Development Company Nashik and IT Company Nashik, while also collaborating with tech corporations globally. Our office is located in Nashik for physical consultations.'
     }
 ];
 

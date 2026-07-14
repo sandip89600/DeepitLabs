@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import SEO from '../seo/SEO';
 import { 
     Cpu, 
@@ -11,7 +12,7 @@ import {
 
 const CASE_STUDIES_DATA = [
     {
-        id: 'mern-analytics',
+        id: 'deepitlabs-platform',
         title: 'Enterprise Analytics Dashboard Migration',
         subtitle: 'Scalable MERN Stack Development for Real-Time Financial Aggregations',
         client: 'Apex Fintech Solutions',
@@ -36,7 +37,7 @@ const CASE_STUDIES_DATA = [
         ]
     },
     {
-        id: 'ai-saas',
+        id: 'haajari-app',
         title: 'CognitiveSupport: AI Customer Service Platform',
         subtitle: 'AI Development Company & SaaS Development Company Integration',
         client: 'Cognitive Support Inc.',
@@ -61,7 +62,7 @@ const CASE_STUDIES_DATA = [
         ]
     },
     {
-        id: 'custom-erp-crm',
+        id: 'construction-management-system',
         title: 'OmniChannel Supply Chain ERP & CRM',
         subtitle: 'Enterprise-Scale ERP Development Company & CRM Development Company Solutions',
         client: 'LogiGlobal Transports',
@@ -297,6 +298,14 @@ const CaseStudies = () => {
                                         </p>
                                     </div>
                                 ))}
+                            </div>
+                            <div className="pt-6">
+                                <Link 
+                                    to={`/case-studies/${activeStudy.id}`} 
+                                    className="inline-flex items-center justify-center bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-6 py-3.5 rounded-xl shadow-lg shadow-indigo-500/10 transition-all"
+                                >
+                                    Read Full Case Study & Architecture →
+                                </Link>
                             </div>
                         </div>
                     </div>

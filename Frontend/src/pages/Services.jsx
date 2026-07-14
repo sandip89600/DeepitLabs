@@ -18,6 +18,7 @@ import {
 const SERVICES_DATA = [
     {
         title: 'Custom Software Development',
+        slug: 'web-development',
         icon: Code,
         color: 'text-indigo-400',
         bg: 'bg-indigo-500/10',
@@ -26,6 +27,7 @@ const SERVICES_DATA = [
     },
     {
         title: 'MERN Stack Development',
+        slug: 'mern-development',
         icon: Layers,
         color: 'text-emerald-400',
         bg: 'bg-emerald-500/10',
@@ -34,6 +36,7 @@ const SERVICES_DATA = [
     },
     {
         title: 'Enterprise Web Applications',
+        slug: 'erp-development',
         icon: Shield,
         color: 'text-purple-400',
         bg: 'bg-purple-500/10',
@@ -42,6 +45,7 @@ const SERVICES_DATA = [
     },
     {
         title: 'Mobile App Development',
+        slug: 'crm-development',
         icon: Smartphone,
         color: 'text-blue-400',
         bg: 'bg-blue-500/10',
@@ -50,6 +54,7 @@ const SERVICES_DATA = [
     },
     {
         title: 'API Engineering & Gateways',
+        slug: 'web-development',
         icon: Database,
         color: 'text-cyan-400',
         bg: 'bg-cyan-500/10',
@@ -57,7 +62,8 @@ const SERVICES_DATA = [
         features: ['OpenAPI / Swagger Specs', 'JWT Stateless Auth Protocols', 'IP Rate Throttling Limits']
     },
     {
-        title: 'Cloud Infrastructure & DevOps',
+        title: 'AI & SaaS Development',
+        slug: 'ai-development',
         icon: Cloud,
         color: 'text-pink-400',
         bg: 'bg-pink-500/10',
@@ -127,12 +133,20 @@ const Services = () => {
                                         </li>
                                     ))}
                                 </ul>
-                                <Link 
-                                    to="/contact" 
-                                    className="inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-bold"
-                                >
-                                    Consult Architect <ArrowRight className="w-3.5 h-3.5" />
-                                </Link>
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                    <Link 
+                                        to={`/services/${s.slug}`} 
+                                        className="inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-bold cursor-pointer"
+                                    >
+                                        Explore Service <ArrowRight className="w-3.5 h-3.5 animate-pulse" />
+                                    </Link>
+                                    <Link 
+                                        to="/contact" 
+                                        className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white font-semibold cursor-pointer"
+                                    >
+                                        Consult Architect
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     ))}

@@ -11,10 +11,15 @@ import Skeleton from './components/ui/Skeleton';
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
 const Services = lazy(() => import('./pages/Services'));
+const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
 const Portfolio = lazy(() => import('./pages/Portfolio'));
 const Blog = lazy(() => import('./pages/Blog'));
+const BlogDetail = lazy(() => import('./pages/BlogDetail'));
 const CaseStudies = lazy(() => import('./pages/CaseStudies'));
+const CaseStudyDetail = lazy(() => import('./pages/CaseStudyDetail'));
 const Faq = lazy(() => import('./pages/Faq'));
+const Industries = lazy(() => import('./pages/Industries'));
+const IndustryDetail = lazy(() => import('./pages/IndustryDetail'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Privacy = lazy(() => import('./pages/Privacy'));
 const Terms = lazy(() => import('./pages/Terms'));
@@ -52,10 +57,15 @@ const AppContent = () => {
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<About />} />
                         <Route path="/services" element={<Services />} />
+                        <Route path="/services/:serviceSlug" element={<ServiceDetail />} />
                         <Route path="/portfolio" element={<Portfolio />} />
                         <Route path="/blog" element={<Blog />} />
+                        <Route path="/blog/:slug" element={<BlogDetail />} />
                         <Route path="/case-studies" element={<CaseStudies />} />
+                        <Route path="/case-studies/:slug" element={<CaseStudyDetail />} />
                         <Route path="/faq" element={<Faq />} />
+                        <Route path="/industries" element={<Industries />} />
+                        <Route path="/industries/:slug" element={<IndustryDetail />} />
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/privacy" element={<Privacy />} />
                         <Route path="/terms" element={<Terms />} />
