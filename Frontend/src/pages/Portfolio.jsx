@@ -1,194 +1,199 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import SEO from "../seo/SEO";
-import { useCMSConfig } from "../services/cms";
+import { ExternalLink, Sparkles, Globe, Smartphone, Compass, ShoppingBag } from "lucide-react";
+
+const PROJECTS_DATA = [
+  {
+    title: "Deep IT Labs Official Agency Portfolio",
+    link: "https://www.portfolio.deepitlabs.in",
+    category: "SaaS & Web",
+    desc: "A high-performance centralized dashboard showcasing our technical projects, developer resource pools, and dynamic case studies.",
+    tags: ["Vite", "React 19", "Tailwind 4", "SEO Optimized"],
+    metric: "100%",
+    metricTitle: "Google SEO Speed Score",
+    icon: Globe,
+    gradient: "from-blue-500/20 to-cyan-500/20",
+    borderColor: "group-hover:border-cyan-500/40",
+    shadowColor: "group-hover:shadow-cyan-500/10",
+    metricColor: "text-cyan-400"
+  },
+  {
+    title: "Haajari App: Attendance Tracking Platform",
+    link: "https://www.haajari.deepitlabs.in",
+    category: "Mobile & ERP",
+    desc: "Geofenced contractor operations app built to automate time tracking, site sync buffers, and payroll reporting for field projects.",
+    tags: ["React Native", "Node.js", "MongoDB", "Geofencing"],
+    metric: "99.7%",
+    metricTitle: "Admin Uptime & Sync Rate",
+    icon: Smartphone,
+    gradient: "from-orange-500/20 to-amber-500/20",
+    borderColor: "group-hover:border-orange-500/40",
+    shadowColor: "group-hover:shadow-orange-500/10",
+    metricColor: "text-orange-400"
+  },
+  {
+    title: "All India 3D Studio Visualization",
+    link: "https://www.allindia3dstudio.deepitlabs.in",
+    category: "Web 3D & Design",
+    desc: "An interactive, web-based 3D design portal displaying high-definition architectural mockups, virtual animations, and visual layouts.",
+    tags: ["WebGL", "Three.js", "React Fiber", "Tailwind CSS"],
+    metric: "60 FPS",
+    metricTitle: "Smooth WebGL Rendering",
+    icon: Compass,
+    gradient: "from-purple-500/20 to-pink-500/20",
+    borderColor: "group-hover:border-purple-500/40",
+    shadowColor: "group-hover:shadow-purple-500/10",
+    metricColor: "text-purple-400"
+  },
+  {
+    title: "Sandeep Pandit Online Shop",
+    link: "https://www.sandeeppandit.shop/",
+    category: "E-Commerce",
+    desc: "A custom headless e-commerce storefront supporting item catalogs, fast checkout interfaces, and Stripe API payment webhooks.",
+    tags: ["Next.js", "Tailwind CSS", "Stripe API", "MongoDB"],
+    metric: "+20%",
+    metricTitle: "Conversion Rate Increase",
+    icon: ShoppingBag,
+    gradient: "from-emerald-500/20 to-teal-500/20",
+    borderColor: "group-hover:border-emerald-500/40",
+    shadowColor: "group-hover:shadow-emerald-500/10",
+    metricColor: "text-emerald-400"
+  }
+];
 
 const Portfolio = () => {
-  const { data: cms } = useCMSConfig();
   const [filter, setFilter] = useState("All");
 
-  const categories = ["All", "SaaS", "ERP/CRM", "API Integration"];
-
-  const rawProjects = cms?.projects || [
-    {
-      title: "SaaS Analytics Dashboard",
-      category: "SaaS",
-      image: "https://as2.ftcdn.net/v2/jpg/03/64/25/69/1000_F_364256948_PrTDg9ViiZqcJ8nCIZNhgrnHNA1fYeVn.jpg",
-      desc:
-        "A real-time analytics platform built using the MERN Stack with advanced charts, authentication, and optimized database queries.",
-      tags: ["React", "Node.js", "MongoDB", "Chart.js"],
-      metric: "+45%",
-      metricTitle: "Rendering Speed",
-    },
-    {
-      title: "Global Supply Chain CRM",
-      category: "ERP/CRM",
-      image: "https://www.sistemaimpulsa.com/blog/wp-content/uploads/2024/01/Automatizar-procesos-de-venta-con-un-CRM-1536x1024.jpg",
-      desc:
-        "Enterprise CRM solution for logistics companies with warehouse management, order tracking and reporting.",
-      tags: ["MERN", "Docker", "Cloudinary", "JWT"],
-      metric: "99.9%",
-      metricTitle: "System Uptime",
-    },
-    {
-      title: "Fintech Payment Gateway",
-      category: "API Integration",
-      image: "https://tse3.mm.bing.net/th/id/OIP.xgBM7J05KZS8nXZxOwX9LgHaEt?rs=1&pid=ImgDetMain&o=7&rm=3",
-      desc:
-        "Secure payment gateway with JWT authentication, Helmet security, Rate Limiting and API monitoring.",
-      tags: ["Express", "Helmet", "JWT", "Redis"],
-      metric: "500K+",
-      metricTitle: "Transactions",
-    },
-    {
-      title: "EdTech Learning Platform",
-      category: "SaaS",
-      image: "https://tse1.mm.bing.net/th/id/OIP.Ns0hzsNAINabHxLIwUU0QgHaD4?rs=1&pid=ImgDetMain&o=7&rm=3",
-      desc:
-        "Modern learning platform supporting student dashboards, course management and file uploads.",
-      tags: ["React", "MongoDB", "Tailwind", "AWS"],
-      metric: "25K+",
-      metricTitle: "Students",
-    },
-  ];
-
-  const projects = rawProjects.map(p => ({
-    ...p,
-    tags: p.tags || ["MERN", "React", "Cloud"]
-  }));
+  const categories = ["All", "SaaS & Web", "Mobile & ERP", "Web 3D & Design", "E-Commerce"];
 
   const filteredProjects =
     filter === "All"
-      ? projects
-      : projects.filter((item) => item.category === filter);
+      ? PROJECTS_DATA
+      : PROJECTS_DATA.filter((item) => item.category === filter);
 
   return (
-    <section className="bg-slate-950 text-white py-20 px-6">
+    <section className="relative bg-[#06070D] text-white py-24 px-6 md:px-12 overflow-hidden">
       <SEO
-        title="Software Engineering Portfolio | Deep IT Labs India"
-        description="View completed web applications, SaaS dashboards, and ERP/CRM projects built by Deep IT Labs, a premier React Development Company and IT Company in Nashik."
+        title="Featured Software Portfolios | Deep IT Labs India"
+        description="Explore live production applications, geofenced mobile apps, and WebGL 3D studios engineered by Deep IT Labs Nashik. Verify our coding quality."
         keywords="MERN Stack Development, React Development Company, Node.js Development Company, ERP Development Company, CRM Development Company, SaaS Development Company, Custom Software Development, Software Company in Nashik, Web Development Company Nashik, IT Company Nashik"
         url="https://www.deepitlabs.in/portfolio"
       />
-      <div className="max-w-7xl mx-auto">
-        {/* Heading */}
 
-        <div className="text-center mb-16">
-          <p className="uppercase tracking-[4px] text-indigo-400 font-semibold">
-            Portfolio
-          </p>
+      {/* Decorative backdrop mesh */}
+      <div 
+        className="absolute inset-0 opacity-[0.02] pointer-events-none"
+        style={{
+          backgroundImage: 'linear-gradient(to right, #8B7CFF 1px, transparent 1px), linear-gradient(to bottom, #8B7CFF 1px, transparent 1px)',
+          backgroundSize: '50px 50px',
+        }}
+      />
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(99,102,241,0.04)_0%,transparent_70%)] blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(139,124,255,0.04)_0%,transparent_70%)] blur-3xl pointer-events-none" />
 
-          <h2 className="text-5xl font-bold mt-4">
-            Our Completed Projects
-          </h2>
-
-          <p className="text-slate-400 max-w-2xl mx-auto mt-5">
-            We build modern software products with scalability,
-            performance and beautiful user experiences.
+      <div className="relative max-w-6xl mx-auto z-10 space-y-16">
+        
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <span className="inline-flex items-center gap-1.5 bg-indigo-500/10 text-indigo-300 text-[10px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full border border-indigo-500/20">
+            <Sparkles className="w-3.5 h-3.5" /> Verifiable Client Deliveries
+          </span>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight bg-gradient-to-r from-white via-slate-100 to-indigo-300 bg-clip-text text-transparent">
+            Our Live Work & Portfolios
+          </h1>
+          <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
+            We don't just write guidelines; we build high-speed deployment systems. Explore our live production portfolios, mobile systems, WebGL catalogs, and custom checkout shops.
           </p>
         </div>
 
-        {/* Filter */}
-
-        <div className="flex justify-center flex-wrap gap-4 mb-14">
+        {/* Filter Navigation */}
+        <div className="flex justify-center flex-wrap gap-2 md:gap-3 max-w-2xl mx-auto">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300
-
+              className={`px-4.5 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all duration-300 cursor-pointer
               ${
                 filter === cat
-                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/30"
-                  : "bg-slate-900 border border-slate-800 text-slate-300 hover:border-indigo-500 hover:text-white"
-              }
-              
-              `}
+                  ? "bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 border border-indigo-500"
+                  : "bg-slate-900/40 border border-slate-900 text-slate-400 hover:border-slate-800 hover:text-white"
+              }`}
             >
               {cat}
             </button>
           ))}
         </div>
 
-        {/* Cards */}
-
-        <div className="grid md:grid-cols-2 gap-10">
-          {filteredProjects.map((project, index) => (
-            <div
-              key={index}
-              className="group rounded-3xl overflow-hidden bg-slate-900/50 border border-slate-800 backdrop-blur-xl transition-all duration-500 hover:-translate-y-3 hover:border-indigo-500 hover:shadow-2xl hover:shadow-indigo-500/20"
-            >
-              {/* Image */}
-
-              <div className="relative overflow-hidden h-72">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition duration-700 group-hover:scale-110"
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-
-                <span className="absolute top-5 right-5 bg-indigo-600 text-white px-4 py-2 rounded-full text-xs font-semibold">
-                  {project.category}
-                </span>
-
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-500 flex items-center justify-center bg-black/50">
-                  <Link to="/case-studies" className="bg-white text-black px-6 py-3 rounded-xl font-semibold hover:scale-105 transition">
-                    View Case Study →
-                  </Link>
-                </div>
-              </div>
-
-              {/* Content */}
-
-              <div className="p-8">
-                <h3 className="text-2xl font-bold mb-4">
-                  {project.title}
-                </h3>
-
-                <p className="text-slate-400 leading-7 mb-7">
-                  {project.desc}
-                </p>
-
-                {/* Metric */}
-
-                <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-2xl p-5 flex justify-between items-center mb-7">
-                  <div>
-                    <h4 className="text-3xl font-bold text-indigo-400">
-                      {project.metric}
-                    </h4>
-
-                    <p className="text-slate-400 text-sm mt-1">
-                      {project.metricTitle}
-                    </p>
+        {/* Dynamic Project Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {filteredProjects.map((project, idx) => {
+            const IconComponent = project.icon;
+            return (
+              <div
+                key={idx}
+                className={`group relative rounded-3xl bg-slate-900/10 border border-slate-900 p-8 flex flex-col justify-between gap-6 backdrop-blur-xl transition-all duration-500 hover:-translate-y-2 ${project.borderColor} hover:shadow-2xl ${project.shadowColor}`}
+              >
+                
+                {/* Upper Details */}
+                <div className="space-y-5">
+                  <div className="flex justify-between items-center">
+                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${project.gradient} flex items-center justify-center border border-slate-800`}>
+                      <IconComponent className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="inline-flex items-center gap-1.5 text-[9px] font-mono font-bold text-indigo-400 bg-indigo-500/5 border border-indigo-500/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                      <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping" /> {project.category}
+                    </span>
                   </div>
 
-                  <div className="text-4xl">🚀</div>
+                  <div className="space-y-2">
+                    <h3 className="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors">
+                      {project.title}
+                    </h3>
+                    <p className="text-slate-400 text-xs md:text-sm leading-relaxed">
+                      {project.desc}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Tags */}
-
-                <div className="flex flex-wrap gap-3 mb-8">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-4 py-2 rounded-full bg-slate-800 text-slate-300 text-sm hover:bg-indigo-600 hover:text-white transition"
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                {/* Mid section: Metric highlight */}
+                <div className="bg-slate-900/30 border border-slate-900/50 rounded-2xl p-4.5 flex justify-between items-center">
+                  <div>
+                    <span className="text-[10px] text-slate-500 uppercase font-mono block mb-0.5">Key Metric Outcome</span>
+                    <h4 className={`text-2xl font-black ${project.metricColor}`}>{project.metric}</h4>
+                  </div>
+                  <div className="text-[10px] text-slate-400 font-semibold text-right max-w-[150px] leading-tight">
+                    {project.metricTitle}
+                  </div>
                 </div>
 
-                {/* Button */}
+                {/* Bottom section: Tags & CTA */}
+                <div className="space-y-6">
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[9px] font-mono bg-slate-950/60 text-slate-400 border border-slate-900 px-2.5 py-1.5 rounded-lg"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
 
-                <Link to="/case-studies" className="w-full block text-center bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 py-4 rounded-xl font-semibold transition-all duration-300">
-                  Explore Case Study →
-                </Link>
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex w-full items-center justify-center gap-2 bg-slate-900 border border-slate-800 hover:bg-indigo-600 hover:border-indigo-500 text-white text-xs font-bold py-3.5 px-6 rounded-2xl transition-all duration-300 shadow-md shadow-black/20"
+                  >
+                    Launch Live Project <ExternalLink className="w-4 h-4" />
+                  </a>
+                </div>
+
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+
       </div>
     </section>
   );
