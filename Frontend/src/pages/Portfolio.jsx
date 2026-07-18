@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import SEO from "../seo/SEO";
-import { ExternalLink, Sparkles, Globe, Smartphone, Compass, ShoppingBag } from "lucide-react";
+import { ExternalLink, Sparkles, Globe, Smartphone, Compass } from "lucide-react";
 
 const PROJECTS_DATA = [
   {
-    title: "Deep IT Labs Official Agency Portfolio",
+    title: "Sandeep Pandit Developer Portfolio",
     link: "https://www.portfolio.deepitlabs.in",
     category: "SaaS & Web",
-    desc: "A high-performance centralized dashboard showcasing our technical projects, developer resource pools, and dynamic case studies.",
+    desc: "The primary professional engineering portfolio of Sandeep Pandit, showcasing interactive developer tools, career credentials, and custom codebase integrations.",
     tags: ["Vite", "React 19", "Tailwind 4", "SEO Optimized"],
     metric: "100%",
     metricTitle: "Google SEO Speed Score",
@@ -18,7 +18,7 @@ const PROJECTS_DATA = [
     metricColor: "text-cyan-400"
   },
   {
-    title: "Haajari App: Attendance Tracking Platform",
+    title: "Haajari App Attendance Tracker",
     link: "https://www.haajari.deepitlabs.in",
     category: "Mobile & ERP",
     desc: "Geofenced contractor operations app built to automate time tracking, site sync buffers, and payroll reporting for field projects.",
@@ -32,7 +32,7 @@ const PROJECTS_DATA = [
     metricColor: "text-orange-400"
   },
   {
-    title: "All India 3D Studio Visualization",
+    title: "All India 3D Studio",
     link: "https://www.allindia3dstudio.deepitlabs.in",
     category: "Web 3D & Design",
     desc: "An interactive, web-based 3D design portal displaying high-definition architectural mockups, virtual animations, and visual layouts.",
@@ -44,27 +44,13 @@ const PROJECTS_DATA = [
     borderColor: "group-hover:border-purple-500/40",
     shadowColor: "group-hover:shadow-purple-500/10",
     metricColor: "text-purple-400"
-  },
-  {
-    title: "Sandeep Pandit Online Shop",
-    link: "https://www.sandeeppandit.shop/",
-    category: "E-Commerce",
-    desc: "A custom headless e-commerce storefront supporting item catalogs, fast checkout interfaces, and Stripe API payment webhooks.",
-    tags: ["Next.js", "Tailwind CSS", "Stripe API", "MongoDB"],
-    metric: "+20%",
-    metricTitle: "Conversion Rate Increase",
-    icon: ShoppingBag,
-    gradient: "from-emerald-500/20 to-teal-500/20",
-    borderColor: "group-hover:border-emerald-500/40",
-    shadowColor: "group-hover:shadow-emerald-500/10",
-    metricColor: "text-emerald-400"
   }
 ];
 
 const Portfolio = () => {
   const [filter, setFilter] = useState("All");
 
-  const categories = ["All", "SaaS & Web", "Mobile & ERP", "Web 3D & Design", "E-Commerce"];
+  const categories = ["All", "SaaS & Web", "Mobile & ERP", "Web 3D & Design"];
 
   const filteredProjects =
     filter === "All"
