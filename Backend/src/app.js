@@ -64,6 +64,9 @@ app.use(cors({
     credentials: true // Crucial to allow transfer of secure refresh token cookies
 }));
 
+// Body parser middleware (must be registered before sanitization and routes)
+app.use(express.json());
+
 // Prevent NoSQL Query Injection by sanitizing body, query, and params in-place
 app.use(mongoSanitize());
 
@@ -85,9 +88,6 @@ app.use('/api', limiter);
 if (process.env.NODE_ENV !== 'production') {
     app.use(morgan('dev'));
 }
-
-// Body parser middleware (must be registered before routes)
-app.use(express.json());
 
 // ========================================================
 // 2. ROUTE REGISTRATIONS

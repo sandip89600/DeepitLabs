@@ -6,13 +6,11 @@ import { useNotificationsStore } from '../store/notificationsStore';
 import api from '../services/api';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
-import Card from '../components/ui/Card';
 import { Helmet } from 'react-helmet-async';
 import { 
     Users, 
     UserPlus, 
     Trash2, 
-    TrendingUp, 
     DollarSign, 
     Activity, 
     Shield, 
@@ -21,11 +19,6 @@ import {
     ArrowUpRight, 
     ArrowDownRight, 
     Search, 
-    Sparkles,
-    Clock,
-    CheckCircle2,
-    XCircle,
-    Eye,
     LayoutDashboard,
     Home as HomeIcon,
     Info,
@@ -36,32 +29,6 @@ import {
     LogOut,
     ExternalLink
 } from 'lucide-react';
-
-// ─── Mini Bar Chart Component ───────────────────────────────────
-const MiniBarChart = ({ data, color = 'indigo' }) => {
-    const max = Math.max(...data.map(d => d.count), 1);
-    return (
-        <div className="flex items-end gap-1.5 h-20 pt-4">
-            {data.map((d, i) => {
-                const heightPct = (d.count / max) * 100;
-                return (
-                    <div key={i} className="flex-1 flex flex-col items-center gap-1 group">
-                        <div className="w-full relative bg-slate-800 rounded-t-sm h-14 flex items-end">
-                            <div 
-                                className={`w-full bg-${color}-500/80 rounded-t-sm group-hover:bg-${color}-400 transition-all duration-500`}
-                                style={{ height: `${heightPct}%` }}
-                            />
-                            <span className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 border border-slate-800 px-1.5 py-0.5 rounded text-[8px] opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-10 font-mono">
-                                {d.count}
-                            </span>
-                        </div>
-                        <span className="text-[9px] text-slate-500 font-mono">M{d._id}</span>
-                    </div>
-                );
-            })}
-        </div>
-    );
-};
 
 // ─── Donut Chart Component ──────────────────────────────────────
 const DonutChart = ({ data }) => {

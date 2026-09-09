@@ -33,7 +33,7 @@ const Home = () => {
         el.style.transition = 'transform 0.5s ease-out';
     };
 
-    const heroTitle = cms?.heroTitle || 'Engineering Premium Custom Web Applications';
+    const heroTitle = cms?.heroTitle || 'AI App & Website Makers';
     const heroDesc = cms?.heroDesc || 'Deep IT Labs builds production-ready software solutions, high-speed dashboards, and custom SaaS platforms designed exactly for your scale.';
 
     const stats = cms?.stats || [
@@ -202,7 +202,7 @@ const Home = () => {
                     <div className="lg:col-span-7 flex flex-col gap-6 relative z-20">
                         <span className="inline-flex items-center gap-2 self-center lg:self-start bg-violet-500/10 text-violet-300 text-xs font-mono font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full border border-violet-500/25">
                             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                            Enterprise Software Engineering
+                            AI App & Website Makers
                         </span>
                         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
                             {heroTitle}

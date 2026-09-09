@@ -27,7 +27,7 @@ const ContactForm = () => {
         defaultValues: { service: 'web-dev', budget: '10k-25k' }
     });
 
-    const onSubmit = (data) => {
+    const onSubmit = (_data) => {
         setLoading(true);
         setTimeout(() => {
             addNotification('Inquiry sent successfully! Our technical leads will connect with you within 24 hours.', 'success');

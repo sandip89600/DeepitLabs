@@ -165,7 +165,7 @@ const getFrontendConfig = asyncHandler(async (req, res, next) => {
             contactEmail: 'info@deepitlabs.in',
             contactPhone: '+91 7058222107',
             headquarters: 'Nashik, Maharashtra, India',
-            heroTitle: 'Engineering Premium Custom Web Applications',
+            heroTitle: 'AI App & Website Makers',
             heroDesc: 'Deep IT Labs builds production-ready software solutions, high-speed dashboards, and custom SaaS platforms designed exactly for your scale.',
             stats: [
                 { value: '150+', label: 'Projects Completed' },
