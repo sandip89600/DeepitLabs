@@ -49,6 +49,9 @@ const Navbar = () => {
                     {/* Check if user is logged into portal */}
                     {user ? (
                         <>
+                            <NavLink to="/builder" className="text-xs font-extrabold text-indigo-400 hover:text-indigo-300 px-3 py-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 flex items-center gap-1.5 transition-all">
+                                ⚡ AI Studio
+                            </NavLink>
                             <NavLink to="/dashboard" className={activeStyle}>Dashboard</NavLink>
                             
                             {/* Admin or Mentor navigation routes */}
@@ -57,6 +60,13 @@ const Navbar = () => {
                             )}
 
                             <NavLink to="/settings" className={activeStyle}>Settings</NavLink>
+                            
+                            <button 
+                                onClick={handleLogout} 
+                                className="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-semibold px-3 py-1.5 rounded-lg border border-red-500/20 transition-all cursor-pointer"
+                            >
+                                Logout
+                            </button>
                         </>
                     ) : (
                         <>

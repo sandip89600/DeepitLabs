@@ -30,6 +30,7 @@ const Register = lazy(() => import('./pages/Register'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const AdminLayout = lazy(() => import('./pages/AdminLayout'));
 const Settings = lazy(() => import('./pages/Settings'));
+const BuilderLayout = lazy(() => import('./pages/BuilderLayout'));
 
 // Reset scroll coordinate offsets on route navigation
 const ScrollToTop = () => {
@@ -43,7 +44,7 @@ const ScrollToTop = () => {
 // Wrap main content to fetch location for conditional Navbar/Footer rendering
 const AppContent = () => {
     const location = useLocation();
-    const showNavAndFooter = !location.pathname.startsWith('/admin');
+    const showNavAndFooter = !location.pathname.startsWith('/admin') && !location.pathname.startsWith('/builder');
 
     return (
         <div className="flex flex-col min-h-screen bg-slate-950 text-white font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
@@ -73,6 +74,24 @@ const AppContent = () => {
                         {/* Auth Portals */}
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
+
+                        {/* Dedicated AI Agent Build Studio */}
+                        <Route 
+                            path="/builder" 
+                            element={
+                                <ProtectedRoute>
+                                    <BuilderLayout />
+                                </ProtectedRoute>
+                            } 
+                        />
+                        <Route 
+                            path="/builder/:projectId" 
+                            element={
+                                <ProtectedRoute>
+                                    <BuilderLayout />
+                                </ProtectedRoute>
+                            } 
+                        />
 
                         {/* Authenticated Academy Dashboards */}
                         <Route 

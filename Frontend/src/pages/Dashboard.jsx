@@ -14,7 +14,6 @@ import {
     Award,
     Zap,
     PlayCircle,
-    FileText,
     MessageSquare,
     CreditCard,
     ChevronRight,
@@ -233,7 +232,6 @@ const Dashboard = () => {
     };
 
     const hasData = enrolledCourses.length > 0 || isSubscribed;
-    const streak = hasData ? 5 : 0;
     const xpPoints = enrolledCourses.length * 400 + (isSubscribed ? 1500 : 0);
 
     const totalHours = enrolledCourses.length * 12;
@@ -276,11 +274,18 @@ const Dashboard = () => {
                 {/* Minimalist Header (No user name greeting banner) */}
                 <div className="flex justify-between items-center border-b border-white/5 pb-6">
                     <div>
-                        <span className="text-[9px] font-mono uppercase tracking-widest text-indigo-400">Student Dashboard</span>
+                        <span className="text-[9px] font-mono uppercase tracking-widest text-indigo-400">AI App & Website Makers Console</span>
                         <h1 className="text-2xl font-black tracking-tight text-white mt-1">Dashboard Console</h1>
-                        <p className="text-slate-500 text-xs mt-0.5">Access courses, view metrics, and manage billing coordinates.</p>
+                        <p className="text-slate-500 text-xs mt-0.5">Access courses, view metrics, and launch AI Agent Build Studio.</p>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => navigate('/builder')}
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg shadow-indigo-600/25 transition-all flex items-center gap-2 cursor-pointer"
+                        >
+                            <Sparkles className="w-4 h-4 text-amber-300" />
+                            <span>+ Build with AI Agent</span>
+                        </button>
                         <button className="p-2.5 text-slate-400 hover:text-white bg-slate-900/60 hover:bg-slate-800 border border-slate-800/60 rounded-xl transition-all cursor-pointer">
                             <Bell className="w-4 h-4" />
                         </button>
